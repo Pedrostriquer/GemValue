@@ -1,27 +1,18 @@
+/* src/components/WhyDiamonds/WhyDiamonds.css */
+
 /* --- CONTAINER E FUNDO --- */
 .diamonds-wrapper {
   position: relative;
   width: 100%;
-  padding: 7rem 5%;
+  padding: 8rem 5%;
   font-family: 'Inter', sans-serif;
-  color: white;
+  
+  /* FUNDO DA SEÇÃO: BRANCO */
+  background-color: #ffffff;
+  background-image: none;
+  
+  color: #334155; 
   overflow: hidden;
-
-  /* --- MÚLTIPLOS GRADIENTES PARA CONEXÃO PERFEITA --- */
-  
-  background-color: #01050a; /* Base de segurança */
-  
-  background-image: 
-    /* CAMADA 1 (CONEXÃO SUPERIOR): 
-       Vai da cor final da sessão anterior (#081c42, no canto superior esquerdo)
-       para a cor escura do topo da tela (#01050a, no canto superior direito).
-       Usamos 90deg para que o gradiente ocorra apenas horizontalmente no topo. */
-    linear-gradient(135deg, #081c42 0%, #01050a 100%),
-    
-    /* CAMADA 2 (FLUXO DIAGONAL PRINCIPAL): 
-       O seu gradiente principal de 135deg, mas com opacidade zero no começo,
-       deixando a cor #081c42 vir de baixo e se misturar ao #01050a. */
-    linear-gradient(230deg, #ffffff 100%, #081c42 90%);
 }
 
 .diamonds-container {
@@ -34,7 +25,7 @@
 /* --- LAYOUT GERAL --- */
 .diamonds-content-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 50% para cada lado */
+  grid-template-columns: 1fr 1fr;
   gap: 6rem;
   align-items: center;
 }
@@ -51,100 +42,143 @@
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 2px;
-  color: #60a5fa; /* Azul claro consistente */
+  color: #2563EB; 
   text-transform: uppercase;
   margin-bottom: 1rem;
+  background: rgba(37, 99, 235, 0.1);
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(37, 99, 235, 0.2);
 }
 
 .diamonds-title {
   font-size: 2.8rem;
   line-height: 1.15;
   font-weight: 700;
-  color: white;
+  /* Título da seção continua escuro para contraste com o fundo branco */
+  color: #0f172a; 
 }
 
+/* EFEITO DRAW SHAPE (Sublinhado) */
 .text-blue-gradient {
-  background: linear-gradient(90deg, #60a5fa, #93c5fd);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  position: relative;
+  display: inline-block;
+  color: #1d4ed8;
+  background: none;
+  -webkit-text-fill-color: initial;
+  -webkit-background-clip: border-box;
+  z-index: 1;
+}
+
+.text-blue-gradient::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px; 
+  width: 100%;
+  height: 12px;
+  z-index: -1;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url("data:image/svg+xml,%3Csvg width='200' height='9' viewBox='0 0 200 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.00025 7.00005C33.6062 2.65176 112.986 -2.71458 197.989 3.00762' stroke='%233B82F6' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 .diamonds-highlight {
   font-size: 1.2rem;
   line-height: 1.6;
-  color: #e2e8f0; /* Cinza bem claro */
-  border-left: 3px solid #60a5fa;
+  color: #334155; 
+  border-left: 3px solid #2563EB;
   padding-left: 1.5rem;
+  font-weight: 600;
 }
 
 .diamonds-body {
   font-size: 1rem;
   line-height: 1.7;
-  color: #94a3b8; /* Cinza azulado */
+  color: #475569;
 }
 
 .simple-divider {
   width: 100%;
   height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+  background: #e2e8f0;
 }
 
 .custodia-info {
   display: flex;
   align-items: center;
   gap: 0.8rem;
-  color: #bfdbfe;
-  font-weight: 500;
+  color: #1e40af;
+  font-weight: 600;
   font-size: 0.95rem;
 }
 
 /* --- COLUNA GRID DE CARDS (ESQUERDA) --- */
 .diamonds-grid-col {
   display: grid;
-  grid-template-columns: 1fr 1fr; /* 2 colunas internas */
+  grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
 }
 
-/* --- O CARD ESTILO GLASS (Consistente com o resto do site) --- */
+/* --- O CARD DARK BLUE --- */
 .glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px; /* Borda arredondada, sem cortes */
+  /* Fundo azul escuro solicitado */
+  background: #0b2552;
+  
+  /* Borda sutil para definição */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  
+  border-radius: 16px;
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
   transition: all 0.3s ease;
+  
+  /* Sombra mais profunda e colorida para combinar com o azul */
+  box-shadow: 0 15px 35px rgba(11, 37, 82, 0.25);
 }
 
 .glass-card:hover {
-  background: rgba(96, 165, 250, 0.05); /* Leve toque azul no hover */
-  border-color: rgba(96, 165, 250, 0.3);
+  background: #0f3066; /* Levemente mais claro no hover */
+  border-color: #2563EB;
   transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(11, 37, 82, 0.35);
 }
 
 .icon-box {
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  background: rgba(96, 165, 250, 0.1);
+  /* Fundo translúcido para o ícone */
+  background: rgba(255, 255, 255, 0.08); 
+  border: 1px solid rgba(255, 255, 255, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #60a5fa;
+  color: #60a5fa; /* Azul claro vibrante */
   margin-bottom: 0.5rem;
 }
 
+.glass-card:hover .icon-box {
+  background: #2563EB;
+  color: white;
+  border-color: #2563EB;
+}
+
+/* --- TEXTOS DENTRO DO CARD (DEVEM SER CLAROS AGORA) --- */
 .card-title {
   font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
+  font-weight: 700;
+  /* Texto Branco */
+  color: #ffffff; 
 }
 
 .card-desc {
   font-size: 0.9rem;
   line-height: 1.5;
-  color: #94a3b8;
+  /* Cinza azulado claro para leitura no fundo escuro */
+  color: #b4c6e0; 
 }
 
 /* --- RESPONSIVIDADE --- */
@@ -154,7 +188,6 @@
     gap: 4rem;
   }
   
-  /* O texto fica em cima no mobile */
   .diamonds-text-col {
     order: -1;
   }
@@ -166,7 +199,7 @@
 
 @media (max-width: 640px) {
   .diamonds-grid-col {
-    grid-template-columns: 1fr; /* Cards viram uma coluna só em telas muito pequenas */
+    grid-template-columns: 1fr;
   }
   
   .diamonds-wrapper {

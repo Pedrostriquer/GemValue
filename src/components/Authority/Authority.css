@@ -1,0 +1,245 @@
+/* src/components/Authority/Authority.css */
+
+.authority-wrapper {
+  position: relative;
+  width: 100%;
+  /* COMPRESSÃO: Reduzi de 10rem para 6rem. 
+     Isso encurta a altura da sessão significativamente. */
+  padding: 6rem 5%; 
+  font-family: 'Inter', sans-serif;
+  background-color: #0b2552; 
+  color: white;
+  overflow: hidden;
+}
+
+/* --- CORTES BRANCOS (Mantidos conforme seu pedido) --- */
+.auth-clip-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  clip-path: polygon(100% 13%, 0 0, 100% 0);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.auth-clip-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  clip-path: polygon(0 13%, 100% 0, 0 0); /* Seu polygon corrigido */
+  transform: scaleY(-1);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* --- NOVO: EFEITO DE LUZ (GLOW) --- */
+.authority-glow {
+  position: absolute;
+  top: 15%; /* Posicionado um pouco para cima do centro */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 50%;
+  /* Gradiente radial: Branco brilhante no centro, azulando e sumindo nas bordas */
+  background: radial-gradient(
+    circle, 
+    rgba(37, 99, 235, 0.25) 0%, 
+    rgba(15, 23, 42, 0) 70%
+  );
+  filter: blur(40px); /* Suaviza muito para parecer luz */
+  z-index: 2; /* Fica acima do fundo, mas abaixo do texto */
+  pointer-events: none;
+}
+
+/* --- LOGO FUNDO --- */
+.authority-fixed-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%; 
+  height: 200%; 
+  background-attachment: fixed;
+  background-position: 100% center;
+  background-repeat: no-repeat;
+  background-size: auto 320vh; 
+  mix-blend-mode: overlay;
+  z-index: 0;
+  pointer-events: none;
+  will-change: opacity, filter;
+}
+
+.authority-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Ajustei o overlay para ser um pouco mais transparente no centro para a luz passar */
+  background: radial-gradient(circle at center, rgba(11, 37, 82, 0.3) 0%, rgba(11, 37, 82, 0.95) 100%);
+  z-index: 1;
+}
+
+.authority-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 3; /* Z-index maior para ficar acima do glow */
+}
+
+/* --- CONTEÚDO --- */
+.auth-content-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  text-align: center;  
+  gap: 1.5rem; /* COMPRESSÃO: Reduzido o gap entre elementos */
+  max-width: 850px;
+  margin: 0 auto; 
+  margin-top: 80px;
+  margin-bottom: 80px;
+}
+
+.auth-title {
+  font-size: 3.5rem;
+  line-height: 1.1;
+  font-weight: 700;
+  color: white; /* Fallback */
+}
+
+/* --- DEGRADÊ TITANIUM DIAGONAL (FIX) --- */
+/* Agora aplicamos no bloco inteiro */
+.auth-title.text-titanium-gradient {
+  /* Gradiente diagonal (135deg) */
+  background: linear-gradient(
+    165deg, 
+    #ffffff 0%,   /* Branco puro no canto sup esquerdo */
+    #e2e8f0 50%,  /* Cinza claro no meio */
+    #64748b 100%  /* Cinza azulado no canto inf direito */
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  
+  /* Garante que o gradiente pegue o bloco todo */
+  display: inline-block; 
+  
+  /* Sombra sutil para destacar do fundo */
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
+}
+
+.auth-desc {
+  font-size: 1.1rem; /* Leve redução para compactar */
+  line-height: 1.6;
+  color: #cbd5e1;
+  max-width: 750px;
+}
+
+.auth-desc strong {
+  color: white;
+  font-weight: 600;
+}
+
+.simple-blue-divider {
+  width: 80px;
+  height: 4px;
+  background: #2563EB;
+  border-radius: 2px;
+  margin-top: 0.5rem;
+}
+
+/* --- GRID DE PILARES --- */
+.pillars-grid-center {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 1.5rem;
+  width: 100%;
+  margin-top: 2rem; /* COMPRESSÃO: Reduzido margin-top */
+}
+
+.pillar-clean {
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 1rem; /* Compactado */
+  padding: 1.5rem 1rem; /* Compactado */
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pillar-clean:hover {
+  background: rgba(37, 99, 235, 0.15);
+  transform: translateY(-5px);
+  border-color: rgba(37, 99, 235, 0.5);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.pillar-icon-box {
+  width: 48px; /* Ícone levemente menor */
+  height: 48px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #60a5fa;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.pillar-clean:hover .pillar-icon-box {
+  background: #2563EB;
+  color: white;
+  transform: scale(1.1);
+}
+
+.pillar-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.pillar-info h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: white;
+}
+
+.pillar-info span {
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 1024px) {
+  .pillars-grid-center {
+    grid-template-columns: 1fr 1fr;
+  }
+  .authority-fixed-bg {
+    width: 100%; 
+    height: 100%;
+    background-size: 150%; 
+    background-position: center center;
+  }
+}
+
+@media (max-width: 640px) {
+  .pillars-grid-center {
+    grid-template-columns: 1fr; 
+  }
+  .auth-title {
+    font-size: 2rem;
+  }
+  .authority-wrapper {
+    padding: 6rem 5%; /* Ajuste mobile */
+  }
+}

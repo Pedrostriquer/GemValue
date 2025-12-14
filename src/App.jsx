@@ -8,6 +8,9 @@ import Hero from './components/Hero/Hero';
 import WhyPhysical from './components/WhyPhysical/WhyPhysical'; 
 import WhyDiamonds from './components/WhyDiamonds/WhyDiamonds'; 
 import HowItWorks from './components/HowItWorks/HowItWorks'; // NOVA SEÇÃO IMPORTADA AQUI
+import Parameters from './components/Parameters/Parameters'; // Importe aqui
+import Authority from './components/Authority/Authority';
+import TargetAudience from './components/TargetAudience/TargetAudience'; // Importe aqui
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
       <WhyPhysical />
       <WhyDiamonds /> 
       <HowItWorks /> 
+      <Parameters />
+      <Authority />
+      <TargetAudience />
       
       {/* Adicione outras seções aqui conforme forem criadas */}
     </main>

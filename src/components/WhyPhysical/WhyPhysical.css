@@ -1,28 +1,43 @@
+/* src/components/WhyPhysical/WhyPhysical.css */
+
 /* --- CONTAINER GERAL --- */
 .why-wrapper {
   position: relative;
   width: 100%;
-  padding: 6rem 5%;
   
-  /* --- A MÁGICA DO GRADIENTE COMPLEXO --- */
+  /* Ajuste de padding para o conteúdo não bater no corte */
+  padding: 10rem 5% 6rem;
   
-  /* 1. Definimos a cor base para evitar buracos */
+  /* 1. O FUNDO DO CONTAINER VOLTA A SER O GRADIENTE ESCURO (O "antigo") */
+  /* Essa cor aparecerá apenas na área "cortada" do triângulo */
   background-color: #01050a;
-  
   background-image: 
-    /* CAMADA 1 (Fica por cima): 
-       Um gradiente vertical curto que vai do #01050a sólido para transparente.
-       Isso "apaga" qualquer azul que tente subir para o topo da tela. */
     linear-gradient(180deg, #071124 0%, rgba(1, 5, 10, 0) 95%),
-    
-    /* CAMADA 2 (Fica por baixo): 
-       O seu gradiente original de 230deg. 
-       Ajustei o start para 20% para o azul demorar um pouco mais a aparecer. */
     linear-gradient(225deg, #01050a 8%, #081c42 100%);
     
   font-family: 'Inter', sans-serif;
-  color: white;
+  color: #334155; 
   overflow: hidden;
+  
+  /* IMPORTANTE: Removemos o clip-path daqui, pois ele cortaria o gradiente também */
+}
+
+/* 2. A CAMADA BRANCA (Pseudo-elemento) */
+/* Isso cria um fundo branco falso que fica por cima do gradiente */
+.why-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff; /* A cor principal da seção */
+  
+  /* O CORTE ACONTECE AQUI NA CAMADA BRANCA */
+  /* A área definida pelo polígono fica branca. O que fica de fora (o triângulo no topo esquerdo) fica transparente e mostra o gradiente de baixo. */
+  clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 100%);
+  
+  z-index: 0; /* Garante que fique atrás do texto */
 }
 
 .why-container {
@@ -30,15 +45,16 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  /* gap removido pois o header não está mais separado */
+  position: relative;
+  z-index: 1; /* Garante que o conteúdo fique na frente da camada branca */
 }
 
-/* --- HEADER INTERNO (Agora dentro da coluna) --- */
+/* --- HEADER INTERNO --- */
 .why-header-internal {
   margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Alinhado à esquerda */
+  align-items: flex-start;
 }
 
 .section-tag {
@@ -46,7 +62,7 @@
   font-size: 0.85rem;
   font-weight: 700;
   letter-spacing: 1px;
-  color: #ffffff; 
+  color: #2563EB;
   text-transform: uppercase;
   margin-bottom: 1.5rem;
   background: rgba(37, 99, 235, 0.1);
@@ -56,23 +72,29 @@
 }
 
 .why-title {
-  font-size: 2.5rem; /* Leve ajuste para caber melhor na coluna */
+  font-size: 2.5rem;
   line-height: 1.2;
   font-weight: 700;
-  color: #ffffff;
   letter-spacing: -1px;
+  margin-bottom: 1rem;
+  
+  /* Gradiente no texto do título para manter a identidade */
+  background: linear-gradient(135deg, #020610 0%, #1e3a8a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
 }
 
 /* --- GRID LAYOUT --- */
 .why-content-grid {
   display: grid;
-  /* Ajuste de proporção: Texto (com título) ocupa um pouco mais de espaço agora */
   grid-template-columns: 1fr 1fr; 
   gap: 5rem;
   align-items: start;
 }
 
-/* --- COLUNA ESQUERDA (TEXTO + TÍTULO) --- */
+/* --- COLUNA ESQUERDA (TEXTO) --- */
 .why-text-col {
   display: flex;
   flex-direction: column;
@@ -84,9 +106,9 @@
 .highlight-text {
   font-size: 1.2rem;
   line-height: 1.6;
-  color: #CADEED; 
-  font-weight: 500;
-  border-left: 4px solid #ffffff;
+  font-weight: 600;
+  color: #1e3a8a; 
+  border-left: 4px solid #2563EB;
   padding-left: 20px;
   margin-top: 1rem;
 }
@@ -94,7 +116,7 @@
 .body-text {
   font-size: 1rem;
   line-height: 1.7;
-  color: #b4c6e0;
+  color: #475569; 
 }
 
 .decorative-line {
@@ -109,7 +131,7 @@
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
-  padding-top: 2rem; /* Pequeno ajuste visual para alinhar com o texto */
+  padding-top: 2rem;
 }
 
 .feature-card {
@@ -117,18 +139,18 @@
   align-items: flex-start;
   gap: 1.5rem;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #f8fafc; 
+  border: 1px solid #e2e8f0;
   border-radius: 12px;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   cursor: default;
 }
 
 .feature-card:hover {
-  border-color: rgba(37, 99, 235, 0.4);
+  background: #ffffff;
+  border-color: #2563EB;
   transform: translateX(10px); 
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  background: rgba(11, 37, 82, 0.3); /* Um toque do seu azul no hover */
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
 }
 
 .card-icon-wrapper {
@@ -137,7 +159,7 @@
   justify-content: center;
   min-width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+  background: rgba(37, 99, 235, 0.1);
   border: 1px solid rgba(37, 99, 235, 0.2);
   border-radius: 10px;
   color: #2563EB;
@@ -158,13 +180,13 @@
 
 .card-info h4 {
   font-size: 1.1rem;
-  font-weight: 600;
-  color: white;
+  font-weight: 700;
+  color: #1e3a8a; 
 }
 
 .card-info p {
   font-size: 0.95rem;
-  color: #b4c6e0;
+  color: #64748b;
   line-height: 1.5;
 }
 
@@ -187,7 +209,7 @@
 
 @media (max-width: 768px) {
   .why-wrapper {
-    padding: 4rem 5%;
+    padding: 8rem 5% 4rem;
   }
 
   .feature-card {

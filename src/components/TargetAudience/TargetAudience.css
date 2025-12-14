@@ -1,0 +1,148 @@
+.target-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 6rem 5%;
+  font-family: 'Inter', sans-serif;
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+.target-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* --- HEADER (Agora centralizado no topo) --- */
+.target-header {
+  margin-bottom: 4rem;
+  max-width: 800px; /* Limita largura para não ficar muito esticado */
+}
+
+.section-tag-minimal {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #64748b;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  border-left: 3px solid #2563EB; /* Detalhe azul na esquerda */
+  padding-left: 10px;
+}
+
+.target-title {
+  font-size: 3rem;
+  line-height: 1.1;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -1px;
+}
+
+/* --- A LISTA WIDE --- */
+.target-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #e2e8f0; /* Fecha a lista em cima também */
+}
+
+.target-row {
+  position: relative;
+  padding: 2rem 0;
+  cursor: default; /* Remove o cursor de "mãozinha" já que não é link */
+  transition: background-color 0.3s ease;
+}
+
+/* O LAYOUT DA LINHA (GRID DE 3 PARTES) */
+.row-content {
+  display: grid;
+  /* 15% para ícone/número
+     35% para o título
+     50% para a descrição (o resto)
+  */
+  grid-template-columns: 120px 1.5fr 2fr; 
+  align-items: center;
+  gap: 2rem;
+}
+
+/* COLUNA 1: ÍCONE */
+.row-col-icon {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.row-number {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #cbd5e1;
+  font-family: monospace;
+}
+
+.row-icon-wrapper {
+  color: #94a3b8;
+  transition: all 0.3s ease;
+}
+
+.target-row.active .row-icon-wrapper {
+  color: #2563EB;
+  transform: scale(1.1);
+}
+
+/* COLUNA 2: TÍTULO */
+.row-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1e293b;
+  transition: color 0.3s ease;
+  margin: 0;
+}
+
+.target-row.active .row-title {
+  color: #2563EB;
+}
+
+/* COLUNA 3: DESCRIÇÃO */
+.row-desc-text {
+  font-size: 1rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+  /* A descrição agora é protagonista, não espremida */
+}
+
+/* --- DIVISOR ANIMADO EMBAIXO --- */
+.row-divider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #e2e8f0;
+  overflow: hidden;
+}
+
+.divider-fill {
+  height: 100%;
+  background-color: #2563EB;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 850px) {
+  /* No tablet/mobile, quebramos o grid para vertical */
+  .row-content {
+    grid-template-columns: 1fr; /* Uma coisa embaixo da outra */
+    gap: 1rem;
+  }
+  
+  .target-title {
+    font-size: 2.2rem;
+  }
+
+  .row-col-icon {
+    margin-bottom: 0.5rem;
+  }
+  
+  .row-title {
+    font-size: 1.4rem;
+  }
+}
