@@ -7,6 +7,7 @@ import {
   Scale, 
   Award 
 } from 'lucide-react';
+import { GlowingEffect } from '../ui/GlowingEffect'; // Importando o efeito
 import './WhyDiamonds.css';
 
 const WhyDiamonds = () => {
@@ -32,7 +33,6 @@ const WhyDiamonds = () => {
       title: "Escassez Natural",
       desc: "Recurso finito com demanda histórica constante."
     }
-    // Removi um item para fechar o Grid 2x2 perfeitamente, fica mais harmônico visualmente
   ];
 
   return (
@@ -41,7 +41,7 @@ const WhyDiamonds = () => {
         
         <div className="diamonds-content-grid">
           
-          {/* COLUNA ESQUERDA: GRID DE CARDS (2x2) */}
+          {/* COLUNA ESQUERDA: GRID DE CARDS COM GLOWING EFFECT */}
           <motion.div 
             className="diamonds-grid-col"
             initial={{ opacity: 0, x: -40 }}
@@ -50,17 +50,32 @@ const WhyDiamonds = () => {
             viewport={{ once: true }}
           >
             {features.map((item, index) => (
-              <div key={index} className="glass-card">
-                <div className="icon-box">
-                  {item.icon}
+              <div key={index} className="wd-card-wrapper">
+                {/* Container relativo para o Glow */}
+                <div className="wd-relative-card">
+                  <GlowingEffect
+                    spread={40}
+                    glow={true}
+                    disabled={false}
+                    proximity={64}
+                    inactiveZone={0.01}
+                    borderWidth={3}
+                  />
+                  
+                  {/* Conteúdo do Card (Fundo Azul Mais Claro) */}
+                  <div className="wd-card-content">
+                    <div className="icon-box">
+                      {item.icon}
+                    </div>
+                    <h3 className="card-title">{item.title}</h3>
+                    <p className="card-desc">{item.desc}</p>
+                  </div>
                 </div>
-                <h3 className="card-title">{item.title}</h3>
-                <p className="card-desc">{item.desc}</p>
               </div>
             ))}
           </motion.div>
 
-          {/* COLUNA DIREITA: TEXTO EXPLICATIVO */}
+          {/* COLUNA DIREITA: TEXTO EXPLICATIVO (Mantido igual) */}
           <motion.div 
             className="diamonds-text-col"
             initial={{ opacity: 0, x: 40 }}

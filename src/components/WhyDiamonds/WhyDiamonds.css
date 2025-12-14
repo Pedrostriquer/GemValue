@@ -6,11 +6,7 @@
   width: 100%;
   padding: 8rem 5%;
   font-family: 'Inter', sans-serif;
-  
-  /* FUNDO DA SEÇÃO: BRANCO */
   background-color: #ffffff;
-  background-image: none;
-  
   color: #334155; 
   overflow: hidden;
 }
@@ -30,11 +26,12 @@
   align-items: center;
 }
 
-/* --- COLUNA TEXTO (DIREITA) --- */
+/* --- COLUNA DIREITA (TEXTO) --- */
 .diamonds-text-col {
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  order: 1; /* Garante ordem visual se necessário */
 }
 
 .section-tag-clean {
@@ -55,7 +52,6 @@
   font-size: 2.8rem;
   line-height: 1.15;
   font-weight: 700;
-  /* Título da seção continua escuro para contraste com o fundo branco */
   color: #0f172a; 
 }
 
@@ -64,9 +60,6 @@
   position: relative;
   display: inline-block;
   color: #1d4ed8;
-  background: none;
-  -webkit-text-fill-color: initial;
-  -webkit-background-clip: border-box;
   z-index: 1;
 }
 
@@ -120,65 +113,74 @@
   gap: 1.5rem;
 }
 
-/* --- O CARD DARK BLUE --- */
-.glass-card {
-  /* Fundo azul escuro solicitado */
-  background: #0b2552;
-  
-  /* Borda sutil para definição */
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  
+/* --- ESTRUTURA DOS CARDS COM GLOW --- */
+
+.wd-card-wrapper {
+  position: relative;
+  height: 100%;
+}
+
+.wd-relative-card {
+  position: relative;
+  height: 100%;
   border-radius: 16px;
+  padding: 1px; /* Espaço para o glow aparecer */
+}
+
+/* O CORAÇÃO DO CARD: COR DE FUNDO AJUSTADA */
+.wd-card-content {
+  position: relative;
+  height: 100%;
+  
+  /* MUDANÇA: Azul mais claro que o anterior (#0b2552) */
+  /* #1e3a8a é um Royal Blue elegante, mais vivo */
+  background: #1e3a8a; 
+  
+  border-radius: 15px; /* Levemente menor que o container */
   padding: 2rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  transition: all 0.3s ease;
   
-  /* Sombra mais profunda e colorida para combinar com o azul */
-  box-shadow: 0 15px 35px rgba(11, 37, 82, 0.25);
+  /* Borda interna sutil */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 35px rgba(30, 58, 138, 0.2);
+  transition: transform 0.3s ease;
 }
 
-.glass-card:hover {
-  background: #0f3066; /* Levemente mais claro no hover */
-  border-color: #2563EB;
-  transform: translateY(-5px);
-  box-shadow: 0 25px 50px rgba(11, 37, 82, 0.35);
+.wd-card-content:hover {
+  /* transform: translateY(-5px); */
 }
 
 .icon-box {
   width: 48px;
   height: 48px;
   border-radius: 12px;
-  /* Fundo translúcido para o ícone */
-  background: rgba(255, 255, 255, 0.08); 
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1); 
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #60a5fa; /* Azul claro vibrante */
+  color: #93c5fd; /* Azul bem claro para o ícone */
   margin-bottom: 0.5rem;
 }
 
-.glass-card:hover .icon-box {
+.wd-card-content:hover .icon-box {
   background: #2563EB;
   color: white;
   border-color: #2563EB;
 }
 
-/* --- TEXTOS DENTRO DO CARD (DEVEM SER CLAROS AGORA) --- */
 .card-title {
   font-size: 1.1rem;
   font-weight: 700;
-  /* Texto Branco */
   color: #ffffff; 
 }
 
 .card-desc {
   font-size: 0.9rem;
   line-height: 1.5;
-  /* Cinza azulado claro para leitura no fundo escuro */
-  color: #b4c6e0; 
+  color: #dbeafe; /* Azul claríssimo para leitura no fundo Royal Blue */
 }
 
 /* --- RESPONSIVIDADE --- */
@@ -188,8 +190,9 @@
     gap: 4rem;
   }
   
+  /* No mobile, o texto vai para baixo, grid de cards para cima (ou ordem normal) */
   .diamonds-text-col {
-    order: -1;
+    order: -1; 
   }
   
   .diamonds-title {

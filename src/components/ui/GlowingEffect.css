@@ -1,0 +1,70 @@
+/* src/components/ui/GlowingEffect.css */
+
+.glowing-effect-container {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glowing-effect-container.visible {
+  opacity: 1;
+}
+
+.glowing-effect-container.disabled {
+  display: none;
+}
+
+.glow-element {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  position: relative;
+}
+
+/* O "segredo" do brilho: Pseudo-elemento com máscara cônica */
+.glow-element::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--glowingeffect-border-width));
+  border-radius: inherit;
+  
+  /* Cria a borda transparente onde o gradiente vai aparecer */
+  border: var(--glowingeffect-border-width) solid transparent;
+  
+  /* O gradiente de cores */
+  background: var(--gradient);
+  background-attachment: fixed;
+  
+  /* Controla a visibilidade baseada na proximidade do mouse */
+  opacity: var(--active);
+  transition: opacity 0.3s;
+  
+  /* Máscaras para mostrar apenas o "feixe" de luz na borda */
+  -webkit-mask-clip: padding-box, border-box;
+  mask-clip: padding-box, border-box;
+  
+  -webkit-mask-composite: source-in; 
+  mask-composite: intersect;
+  
+  /* A máscara dinâmica que gira */
+  -webkit-mask-image: 
+    linear-gradient(#0000, #0000), 
+    conic-gradient(
+      from calc((var(--start) - var(--spread)) * 1deg), 
+      transparent 0deg, 
+      #fff, 
+      transparent calc(var(--spread) * 2deg)
+    );
+    
+  mask-image: 
+    linear-gradient(#0000, #0000), 
+    conic-gradient(
+      from calc((var(--start) - var(--spread)) * 1deg), 
+      transparent 0deg, 
+      #fff, 
+      transparent calc(var(--spread) * 2deg)
+    );
+}

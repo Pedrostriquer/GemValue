@@ -10,6 +10,9 @@ import {
 } from 'lucide-react';
 import './HowItWorks.css';
 
+// Importa o novo efeito
+import { GlowingEffect } from '../ui/GlowingEffect';
+
 // Imports de Imagem
 import businessManImg from '../../assets/handsome-businessman-in-formal-wear-and-glasses-holding-documents-e1676622127393.jpg';
 import logoGemas from '../../assets/logo_Gemas_3D.png';
@@ -72,28 +75,19 @@ const HowItWorks = () => {
 
         <div className="how-main-grid">
           
-          {/* COLUNA ESQUERDA: VISUAL COMPLEXO (NEBO STYLE) */}
+          {/* COLUNA ESQUERDA: VISUAL COMPLEXO */}
           <div className="how-visual-area">
             <div className="complex-nebo-wrapper">
-              
-              {/* Imagem de Fundo */}
               <img 
                 src={businessManImg} 
                 alt="Consultor Especialista" 
                 className="nebo-bg-image"
               />
-
-              {/* O Container da Logo com Borda Invertida Complexa */}
               <div className="nebo-logo-container">
-                {/* As Curvas Invertidas (CSS Magic) */}
                 <div className="inverted-curve-bottom"></div>
                 <div className="inverted-curve-left"></div>
-                
-                {/* A Logo em si */}
                 <img src={logoGemas} alt="Logo GemCash" className="gemcash-logo" />
               </div>
-
-              {/* Card Flutuante Decorativo (Ex: Status) */}
               <motion.div 
                 className="status-card"
                 initial={{ y: 20, opacity: 0 }}
@@ -103,33 +97,44 @@ const HowItWorks = () => {
                 <div className="status-dot"></div>
                 <span>Processo Auditado</span>
               </motion.div>
-
             </div>
           </div>
 
-          {/* COLUNA DIREITA: GRID DE CARDS (PROCESSO) */}
+          {/* COLUNA DIREITA: GRID COM GLOWING EFFECT */}
           <div className="how-steps-grid">
             {steps.map((step, index) => (
               <motion.div 
-                key={index} 
-                className="process-card"
+                key={index}
+                className="process-card-wrapper" // Wrapper para o layout
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}
                 viewport={{ once: true }}
               >
-                <div className="card-header">
-                  <div className="icon-wrapper-glass">
-                    {step.icon}
+                {/* ESTRUTURA DO CARD COM EFEITO */}
+                <div className="relative-glow-card">
+                  <GlowingEffect
+                    spread={40}
+                    glow={true}
+                    disabled={false}
+                    proximity={64}
+                    inactiveZone={0.01}
+                    borderWidth={3}
+                  />
+                  
+                  {/* CONTEÚDO INTERNO DO CARD */}
+                  <div className="process-card-content">
+                    <div className="card-header">
+                      <div className="icon-wrapper-glass">
+                        {step.icon}
+                      </div>
+                      <span className="step-number">{step.id}</span>
+                    </div>
+                    
+                    <h3 className="card-title">{step.title}</h3>
+                    <p className="card-desc">{step.desc}</p>
                   </div>
-                  <span className="step-number">{step.id}</span>
                 </div>
-                
-                <h3 className="card-title">{step.title}</h3>
-                <p className="card-desc">{step.desc}</p>
-                
-                {/* Efeito de borda brilhante no hover */}
-                <div className="card-border-glow"></div>
               </motion.div>
             ))}
           </div>
