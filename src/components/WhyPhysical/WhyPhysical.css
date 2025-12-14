@@ -1,0 +1,202 @@
+/* --- CONTAINER GERAL --- */
+.why-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 6rem 5%;
+  
+  /* --- A MÁGICA DO GRADIENTE COMPLEXO --- */
+  
+  /* 1. Definimos a cor base para evitar buracos */
+  background-color: #01050a;
+  
+  background-image: 
+    /* CAMADA 1 (Fica por cima): 
+       Um gradiente vertical curto que vai do #01050a sólido para transparente.
+       Isso "apaga" qualquer azul que tente subir para o topo da tela. */
+    linear-gradient(180deg, #071124 0%, rgba(1, 5, 10, 0) 95%),
+    
+    /* CAMADA 2 (Fica por baixo): 
+       O seu gradiente original de 230deg. 
+       Ajustei o start para 20% para o azul demorar um pouco mais a aparecer. */
+    linear-gradient(225deg, #01050a 8%, #081c42 100%);
+    
+  font-family: 'Inter', sans-serif;
+  color: white;
+  overflow: hidden;
+}
+
+.why-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* gap removido pois o header não está mais separado */
+}
+
+/* --- HEADER INTERNO (Agora dentro da coluna) --- */
+.why-header-internal {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Alinhado à esquerda */
+}
+
+.section-tag {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #ffffff; 
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  background: rgba(37, 99, 235, 0.1);
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid rgba(37, 99, 235, 0.2);
+}
+
+.why-title {
+  font-size: 2.5rem; /* Leve ajuste para caber melhor na coluna */
+  line-height: 1.2;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -1px;
+}
+
+/* --- GRID LAYOUT --- */
+.why-content-grid {
+  display: grid;
+  /* Ajuste de proporção: Texto (com título) ocupa um pouco mais de espaço agora */
+  grid-template-columns: 1fr 1fr; 
+  gap: 5rem;
+  align-items: start;
+}
+
+/* --- COLUNA ESQUERDA (TEXTO + TÍTULO) --- */
+.why-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  position: sticky;
+  top: 100px; 
+}
+
+.highlight-text {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  color: #CADEED; 
+  font-weight: 500;
+  border-left: 4px solid #ffffff;
+  padding-left: 20px;
+  margin-top: 1rem;
+}
+
+.body-text {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #b4c6e0;
+}
+
+.decorative-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(37,99,235,0.5) 0%, transparent 100%);
+  margin-top: 2rem;
+}
+
+/* --- COLUNA DIREITA (CARDS) --- */
+.why-cards-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  padding-top: 2rem; /* Pequeno ajuste visual para alinhar com o texto */
+}
+
+.feature-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: default;
+}
+
+.feature-card:hover {
+  border-color: rgba(37, 99, 235, 0.4);
+  transform: translateX(10px); 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  background: rgba(11, 37, 82, 0.3); /* Um toque do seu azul no hover */
+}
+
+.card-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  height: 48px;
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(37, 99, 235, 0.05) 100%);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 10px;
+  color: #2563EB;
+}
+
+.feature-card:hover .card-icon-wrapper {
+  background: #2563EB;
+  color: white;
+  border-color: #2563EB;
+  transition: all 0.3s;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.card-info h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+}
+
+.card-info p {
+  font-size: 0.95rem;
+  color: #b4c6e0;
+  line-height: 1.5;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 1024px) {
+  .why-content-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .why-text-col {
+    position: static;
+    margin-bottom: 2rem;
+  }
+  
+  .why-title {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .why-wrapper {
+    padding: 4rem 5%;
+  }
+
+  .feature-card {
+    padding: 1.2rem;
+    align-items: flex-start;
+  }
+
+  .card-icon-wrapper {
+    min-width: 40px;
+    height: 40px;
+  }
+}
