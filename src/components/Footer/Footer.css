@@ -1,0 +1,175 @@
+/* src/components/Footer/Footer.css */
+
+.footer-wrapper {
+  position: relative;
+  width: 100%;
+  
+  /* Borda arredondada no topo como na referência */
+  border-top-left-radius: 40px;
+  border-top-right-radius: 40px;
+  
+  /* Fundo com gradiente radial no topo (efeito spotlight) */
+  background-color: #0b2552; /* Base azul do projeto */
+  background-image: radial-gradient(
+    35% 128px at 50% 0%, 
+    rgba(255, 255, 255, 0.08), 
+    transparent
+  );
+  
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 5rem 5% 3rem;
+  color: white;
+  font-family: 'Inter', sans-serif;
+  margin-top: -20px; /* Leve sobreposição para fechar o design */
+  z-index: 10;
+}
+
+/* LINHA DE LUZ NO TOPO (GLOW LINE) */
+.footer-glow-line {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.5);
+  filter: blur(4px); /* Efeito neon borrado */
+  border-radius: 100%;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.5fr 2fr; /* Coluna da marca maior, links distribuídos */
+  gap: 4rem;
+}
+
+/* --- COLUNA DA MARCA --- */
+.footer-brand-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 400px;
+}
+
+.footer-logo-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.text-blue-400 {
+  color: #60a5fa;
+}
+
+.brand-text {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+
+.footer-desc {
+  font-size: 1rem;
+  color: #b4c6e0;
+  line-height: 1.6;
+}
+
+.footer-desc strong {
+  color: white;
+}
+
+.footer-cnpj {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* --- COLUNAS DE LINKS --- */
+.footer-links-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Duas colunas de links */
+  gap: 2rem;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.column-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.link-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.footer-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #94a3b8;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.footer-link:hover {
+  color: #60a5fa; /* Azul destaque no hover */
+  transform: translateX(5px);
+}
+
+/* Componente de Animação Wrapper */
+.footer-anim-wrapper {
+  width: 100%;
+}
+
+/* --- RESPONSIVIDADE --- */
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  
+  .footer-brand-col {
+    max-width: 100%;
+    text-align: center;
+    align-items: center;
+  }
+  
+  .footer-links-area {
+    grid-template-columns: 1fr 1fr; /* Mantém 2 colunas de links no tablet */
+    justify-items: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-links-area {
+    grid-template-columns: 1fr; /* 1 coluna no mobile */
+    text-align: center;
+    gap: 3rem;
+  }
+
+  .footer-link {
+    justify-content: center; /* Centraliza links no mobile */
+  }
+
+  .footer-wrapper {
+    padding: 4rem 5% 2rem;
+  }
+}
