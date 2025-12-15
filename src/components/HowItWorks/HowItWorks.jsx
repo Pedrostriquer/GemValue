@@ -13,10 +13,6 @@ import './HowItWorks.css';
 // Importa o novo efeito
 import { GlowingEffect } from '../ui/GlowingEffect';
 
-// Imports de Imagem
-import businessManImg from '../../assets/handsome-businessman-in-formal-wear-and-glasses-holding-documents-e1676622127393.jpg';
-import logoGemas from '../../assets/logo_Gemas_3D.png';
-
 const HowItWorks = () => {
   
   const steps = [
@@ -68,44 +64,19 @@ const HowItWorks = () => {
         <div className="how-header">
           <span className="how-tag">FLUXO OPERACIONAL</span>
           <h2 className="how-title">
-            Como funciona a estrutura <br />
+            A estrutura operacional do <br />
             <span className="title-highlight">GemCash</span>
           </h2>
         </div>
 
         <div className="how-main-grid">
           
-          {/* COLUNA ESQUERDA: VISUAL COMPLEXO */}
-          <div className="how-visual-area">
-            <div className="complex-nebo-wrapper">
-              <img 
-                src={businessManImg} 
-                alt="Consultor Especialista" 
-                className="nebo-bg-image"
-              />
-              <div className="nebo-logo-container">
-                <div className="inverted-curve-bottom"></div>
-                <div className="inverted-curve-left"></div>
-                <img src={logoGemas} alt="Logo GemCash" className="gemcash-logo" />
-              </div>
-              <motion.div 
-                className="status-card"
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.6 }}
-              >
-                <div className="status-dot"></div>
-                <span>Processo Auditado</span>
-              </motion.div>
-            </div>
-          </div>
-
-          {/* COLUNA DIREITA: GRID COM GLOWING EFFECT */}
+          {/* GRID FULL WIDTH: 3 COLUNAS */}
           <div className="how-steps-grid">
             {steps.map((step, index) => (
               <motion.div 
                 key={index}
-                className="process-card-wrapper" // Wrapper para o layout
+                className="process-card-wrapper" 
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.5 }}

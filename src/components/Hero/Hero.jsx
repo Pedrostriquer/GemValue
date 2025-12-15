@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, Sparkles, Building2, FileText, ShieldCheck, Info } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Building2, FileText, Info } from 'lucide-react';
 import './Hero.css';
 
 // ASSETS
@@ -45,6 +45,7 @@ const Hero = () => {
       {/* Background */}
       <div className="stage-bg"></div>
 
+      {/* Navbar Desktop Limpa - Logo Esquerda */}
       <nav className="navbar">
         <motion.div 
           className="brand"
@@ -55,12 +56,6 @@ const Hero = () => {
           <img src={logo3D} alt="GemValue" className="brand-logo-3d" />
           <span className="brand-text-gradient">GemValue</span>
         </motion.div>
-        
-        <div className="nav-menu">
-            <a href="#plataforma">Plataforma</a>
-            <a href="#modelo">O Modelo</a>
-            <button className="nav-btn-vibrant">Simular Agora</button>
-        </div>
       </nav>
 
       <motion.div 
@@ -70,36 +65,36 @@ const Hero = () => {
         animate="show"
       >
         
-        {/* COLUNA TEXTO - Atualizada com os textos novos */}
+        {/* ÁREA A: TEXTO PRINCIPAL */}
         <div className="text-column">
           
-          {/* Headline (H1) */}
           <motion.h1 variants={textReveal} className="big-bold-title">
             Ativos físicos reais para proteger e construir patrimônio.
           </motion.h1>
           
-          {/* Subheadline (H2) */}
           <motion.p variants={textReveal} className="description-clean">
             A GemValue estrutura o acesso ao mercado de diamantes certificados,
             oferecendo propriedade real, transparência contratual e previsibilidade fora do
             mercado financeiro tradicional.
           </motion.p>
 
-          {/* Linha de Contexto (H3 Leve) */}
           <motion.div variants={textReveal} className="context-line">
              <Info size={16} className="text-emerald-400"/>
              Conheça o GemCash, o modelo de aquisição em ativos físicos da GemValue.
           </motion.div>
 
-          {/* CTA Principal */}
           <motion.div variants={textReveal} className="cta-block">
             <button className="btn-primary-solid">
-              Simule sua estratégia em ativos físicos <ArrowRight size={20} />
+              Simule sua estratégia em ativos físicos 
+              <ArrowRight size={20} className="cta-arrow" />
             </button>
           </motion.div>
 
-          {/* MICROPROVAS - Lado a Lado */}
-          <motion.div variants={textReveal} className="micro-proofs-container">
+        </div>
+
+        {/* ÁREA B: MICROPROVAS */}
+        {/* No desktop, fica abaixo do texto (grid area: proofsArea). No mobile, vai pra order: 3 */}
+        <motion.div variants={textReveal} className="micro-proofs-container">
             <div className="proof-item">
               <div className="proof-icon-box">
                 <ShieldCheck size={18} />
@@ -118,17 +113,16 @@ const Hero = () => {
               </div>
               <span>Estrutura Gemas Brilhantes desde 2018</span>
             </div>
-          </motion.div>
+        </motion.div>
 
-        </div>
-
-        {/* COLUNA DIREITA (SIMULADOR) - Mantida igual */}
+        {/* ÁREA C: SIMULADOR E IMAGEM */}
         <motion.div 
           className="image-sim-container"
           variants={imageSimReveal}
         >
           <div className="floor-shadow"></div>
           
+          {/* Imagem some no mobile via CSS */}
           <div className="man-image-wrapper">
             <img 
               src={manInChair} 

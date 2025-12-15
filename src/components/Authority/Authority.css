@@ -3,75 +3,85 @@
 .authority-wrapper {
   position: relative;
   width: 100%;
-  /* COMPRESSÃO: Reduzi de 10rem para 6rem. 
-     Isso encurta a altura da sessão significativamente. */
-  padding: 6rem 5%; 
+  
+  /* Mantendo o padding dinâmico do triângulo */
+  padding: calc(10vw + 4rem) 5% 6rem;
+  
   font-family: 'Inter', sans-serif;
   background-color: #0b2552; 
   color: white;
   overflow: hidden;
 }
 
-/* --- CORTES BRANCOS (Mantidos conforme seu pedido) --- */
+/* --- CORTES BRANCOS --- */
 .auth-clip-top {
   position: absolute;
-  top: 0;
+  top: -2px; 
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(10vw + 2px); 
   background-color: #ffffff;
-  clip-path: polygon(100% 13%, 0 0, 100% 0);
+  clip-path: polygon(0 0, 100% 0, 100% 10vw);
   z-index: 10;
   pointer-events: none;
 }
 
 .auth-clip-bottom {
   position: absolute;
-  bottom: 0;
+  bottom: -2px;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: calc(10vw + 2px);
   background-color: #ffffff;
-  clip-path: polygon(0 13%, 100% 0, 0 0); /* Seu polygon corrigido */
+  clip-path: polygon(0 10vw, 100% 0, 0 0); 
   transform: scaleY(-1);
   z-index: 10;
   pointer-events: none;
 }
 
-/* --- NOVO: EFEITO DE LUZ (GLOW) --- */
+/* --- EFEITO DE LUZ (GLOW) --- */
 .authority-glow {
   position: absolute;
-  top: 15%; /* Posicionado um pouco para cima do centro */
+  top: 15%; 
   left: 50%;
   transform: translateX(-50%);
   width: 60%;
   height: 50%;
-  /* Gradiente radial: Branco brilhante no centro, azulando e sumindo nas bordas */
   background: radial-gradient(
     circle, 
     rgba(37, 99, 235, 0.25) 0%, 
     rgba(15, 23, 42, 0) 70%
   );
-  filter: blur(40px); /* Suaviza muito para parecer luz */
-  z-index: 2; /* Fica acima do fundo, mas abaixo do texto */
+  filter: blur(40px); 
+  z-index: 2; 
   pointer-events: none;
 }
 
-/* --- LOGO FUNDO --- */
+/* --- LOGO FUNDO (FIXED & RESPONSIVO) --- */
 .authority-fixed-bg {
-  position: absolute;
+  /* A div deve ser absoluta para ficar DENTRO da sessão */
+  position: fixed; 
   top: 0;
-  left: 0;
-  width: 200%; 
-  height: 200%; 
-  background-attachment: fixed;
-  background-position: 100% center;
+  left: -10px;
+  width: 100%; 
+  height: 100%; 
+  
+  /* O 'fixed' real acontece aqui: a imagem fica presa na tela */
+  /* background-attachment: fixed; */
+  
+  /* DESKTOP: Encostada na esquerda */
+  background-position: left center;
+  
   background-repeat: no-repeat;
-  background-size: auto 320vh; 
+  
+  /* Tamanho controlado para não vazar (altura da tela) */
+  background-size: auto 100vh; 
+  
   mix-blend-mode: overlay;
+  opacity: 0.15; 
   z-index: 0;
   pointer-events: none;
-  will-change: opacity, filter;
+  will-change: transform; /* Otimização para scroll */
 }
 
 .authority-overlay {
@@ -80,8 +90,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  /* Ajustei o overlay para ser um pouco mais transparente no centro para a luz passar */
-  background: radial-gradient(circle at center, rgba(11, 37, 82, 0.3) 0%, rgba(11, 37, 82, 0.95) 100%);
+  background: radial-gradient(circle at 70% 50%, rgba(11, 37, 82, 0.4) 0%, rgba(11, 37, 82, 0.9) 100%);
   z-index: 1;
 }
 
@@ -89,7 +98,7 @@
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
-  z-index: 3; /* Z-index maior para ficar acima do glow */
+  z-index: 3; 
 }
 
 /* --- CONTEÚDO --- */
@@ -98,43 +107,36 @@
   flex-direction: column;
   align-items: center; 
   text-align: center;  
-  gap: 1.5rem; /* COMPRESSÃO: Reduzido o gap entre elementos */
+  gap: 1.5rem; 
   max-width: 850px;
   margin: 0 auto; 
-  margin-top: 80px;
-  margin-bottom: 80px;
+  margin-top: 2rem; 
+  margin-bottom: 4rem;
 }
 
 .auth-title {
   font-size: 3.5rem;
   line-height: 1.1;
   font-weight: 700;
-  color: white; /* Fallback */
+  color: white; 
 }
 
-/* --- DEGRADÊ TITANIUM DIAGONAL (FIX) --- */
-/* Agora aplicamos no bloco inteiro */
 .auth-title.text-titanium-gradient {
-  /* Gradiente diagonal (135deg) */
   background: linear-gradient(
     165deg, 
-    #ffffff 0%,   /* Branco puro no canto sup esquerdo */
-    #e2e8f0 50%,  /* Cinza claro no meio */
-    #64748b 100%  /* Cinza azulado no canto inf direito */
+    #ffffff 0%,   
+    #e2e8f0 50%,  
+    #64748b 100%  
   );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  
-  /* Garante que o gradiente pegue o bloco todo */
   display: inline-block; 
-  
-  /* Sombra sutil para destacar do fundo */
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.3));
 }
 
 .auth-desc {
-  font-size: 1.1rem; /* Leve redução para compactar */
+  font-size: 1.1rem; 
   line-height: 1.6;
   color: #cbd5e1;
   max-width: 750px;
@@ -159,7 +161,7 @@
   grid-template-columns: repeat(4, 1fr); 
   gap: 1.5rem;
   width: 100%;
-  margin-top: 2rem; /* COMPRESSÃO: Reduzido margin-top */
+  margin-top: 2rem; 
 }
 
 .pillar-clean {
@@ -168,8 +170,8 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 1rem; /* Compactado */
-  padding: 1.5rem 1rem; /* Compactado */
+  gap: 1rem; 
+  padding: 1.5rem 1rem; 
   border-radius: 16px;
   transition: all 0.3s ease;
   background: rgba(255, 255, 255, 0.03);
@@ -184,7 +186,7 @@
 }
 
 .pillar-icon-box {
-  width: 48px; /* Ícone levemente menor */
+  width: 48px; 
   height: 48px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
@@ -219,27 +221,62 @@
   color: #94a3b8;
 }
 
-/* --- RESPONSIVIDADE --- */
+/* --- RESPONSIVIDADE TABLET (Até 1024px) --- */
 @media (max-width: 1024px) {
   .pillars-grid-center {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr; /* Cards mudam para 2 colunas */
   }
+  
+  /* TABLET: Imagem vai para o centro e fica um pouco maior */
   .authority-fixed-bg {
-    width: 100%; 
-    height: 100%;
-    background-size: 150%; 
     background-position: center center;
+    background-size: 60% auto; /* Um pouco maior */
+    opacity: 0.1; 
   }
 }
 
+/* --- RESPONSIVIDADE CELULAR (Até 640px) --- */
 @media (max-width: 640px) {
-  .pillars-grid-center {
-    grid-template-columns: 1fr; 
+  /* CELULAR: Imagem no centro, mas MENOR */
+  .authority-fixed-bg {
+    background-position: center center;
+    background-size: 40% auto; /* Menor */
+    opacity: 0.08;
   }
+
+  .pillars-grid-center {
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 1rem;
+  }
+
+  .pillar-clean {
+    padding: 1.2rem 0.5rem;
+    gap: 0.8rem;
+  }
+
+  .pillar-icon-box {
+    width: 40px;
+    height: 40px;
+  }
+  .pillar-icon-box svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .pillar-info h4 {
+    font-size: 0.9rem;
+  }
+  .pillar-info span {
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+
   .auth-title {
     font-size: 2rem;
   }
+  
   .authority-wrapper {
-    padding: 6rem 5%; /* Ajuste mobile */
+    padding-left: 5%;
+    padding-right: 5%;
   }
 }

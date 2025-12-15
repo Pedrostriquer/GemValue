@@ -7,8 +7,7 @@ import {
   Users 
 } from 'lucide-react';
 import './Authority.css';
-
-import logoGemasBg from '../../assets/GEMAS BRILHANTES-109 (1).png';
+import logoGemasBg from '../../assets/GEMAS BRILHANTES-109 (1) (1).png';
 
 const Authority = () => {
   const sectionRef = useRef(null);

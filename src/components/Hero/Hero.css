@@ -1,3 +1,5 @@
+/* src/components/Hero/Hero.css */
+
 /* --- RESET E ESTRUTURA GERAL --- */
 .hero-wrapper {
   position: relative;
@@ -19,13 +21,14 @@
   background: linear-gradient(to bottom, #0b2552 30%, #05142e 70%, #071124 100%);
 }
 
-/* --- NAVBAR --- */
+/* --- NAVBAR (Desktop) --- */
 .navbar {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start; /* Logo na esquerda */
   align-items: center;
   padding: 1.5rem 0;
   z-index: 10;
+  width: 100%;
 }
 
 .brand {
@@ -35,88 +38,64 @@
 }
 
 .brand-logo-3d {
-  height: 45px;
+  height: 48px; /* Tamanho original */
   width: auto;
   filter: drop-shadow(0 4px 8px rgba(0,0,0,0.4));
 }
 
 .brand-text-gradient {
   font-weight: 800;
-  font-size: 1.4rem;
+  font-size: 1.5rem; /* Tamanho original */
   letter-spacing: -0.5px;
   background: linear-gradient(to right, #ffffff, #CADEED);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.nav-menu {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-}
-
-.nav-menu a {
-  text-decoration: none;
-  color: #b4c6e0;
-  font-size: 0.95rem;
-  font-weight: 600;
-  transition: color 0.3s;
-}
-
-.nav-menu a:hover {
-  color: white;
-}
-
-.nav-btn-vibrant {
-  background: rgba(37, 99, 235, 0.2);
-  border: 1px solid rgba(37, 99, 235, 0.5);
-  color: #CADEED;
-  padding: 10px 24px;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.nav-btn-vibrant:hover {
-  background: #2563EB;
-  color: white;
-  border-color: #2563EB;
-  box-shadow: 0 0 15px rgba(37, 99, 235, 0.5);
-}
-
-/* --- CONTEÚDO PRINCIPAL --- */
+/* --- CONTEÚDO PRINCIPAL (GRID DESKTOP) --- */
 .hero-content {
   flex: 1;
   display: grid;
+  /* Grid de 2 colunas */
   grid-template-columns: 1fr 1.2fr;
-  align-items: center;
+  /* Áreas definidas */
+  grid-template-areas: 
+    "textArea imageArea"
+    "proofsArea imageArea";
+  
+  /* Ajuste de alinhamento vertical */
+  grid-template-rows: min-content min-content; 
+  align-content: center; 
+  align-items: center;   
+  
   max-width: 1500px;
   margin: 0 auto;
   width: 100%;
   z-index: 5;
-  gap: 4rem;
+  column-gap: 4rem;
+  row-gap: 1rem;
   padding-bottom: 5vh;
 }
 
-/* --- TEXTOS DA ESQUERDA (ATUALIZADO) --- */
+/* --- ÁREA DE TEXTO (Esquerda Topo) --- */
 .text-column {
-  padding: 2rem 0;
+  grid-area: textArea;
   position: relative;
   z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-/* Título H1 limpo, sem efeito aurora */
 .big-bold-title {
   font-size: 3.5rem;
   line-height: 1.1;
   font-weight: 700;
   margin-bottom: 1.5rem;
   letter-spacing: -1px;
-  color: white; /* Branco sólido */
+  color: white;
 }
 
-/* Subheadline H2 */
 .description-clean {
   color: #b4c6e0;
   font-size: 1.1rem;
@@ -125,7 +104,6 @@
   margin-bottom: 1.5rem;
 }
 
-/* Linha de contexto H3 leve */
 .context-line {
   display: flex;
   align-items: center;
@@ -143,12 +121,11 @@
   align-items: flex-start;
 }
 
-/* BOTÃO CTA (ATUALIZADO: Mais quadrado, sem brilho excessivo) */
 .btn-primary-solid {
-  background: #2563EB; /* Azul sólido */
+  background: #2563EB; 
   border: none;
   padding: 16px 32px;
-  border-radius: 6px; /* Borda pouco arredondada */
+  border-radius: 6px; 
   color: white;
   font-weight: 600;
   font-size: 1rem;
@@ -157,24 +134,29 @@
   gap: 10px;
   cursor: pointer;
   transition: all 0.2s;
-  /* Sem box-shadow brilhante */
 }
 
 .btn-primary-solid:hover {
-  background: #1d4ed8; /* Azul um pouco mais escuro no hover */
+  background: #1d4ed8;
   transform: translateY(-1px);
 }
 
-/* --- MICROPROVAS (ATUALIZADO: Horizontal) --- */
+.cta-arrow {
+  transition: transform 0.3s ease;
+}
+
+/* --- MICROPROVAS (Esquerda Baixo no Desktop) --- */
 .micro-proofs-container {
-  margin-top: 3.5rem;
+  grid-area: proofsArea;
+  
   padding-top: 2rem;
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
-  flex-direction: row; /* Lado a lado */
-  flex-wrap: wrap; /* Quebra linha se tela for pequena */
+  flex-direction: row; 
+  flex-wrap: wrap; 
   gap: 2rem;
   width: 100%;
+  align-self: start; 
 }
 
 .proof-item {
@@ -196,15 +178,18 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   color: #4ade80; 
+  flex-shrink: 0;
 }
 
-/* --- COLUNA DIREITA E SIMULADOR (MANTIDO) --- */
+/* --- COLUNA DIREITA E SIMULADOR --- */
 .image-sim-container {
+  grid-area: imageArea;
+  
   position: relative;
   display: flex;
-  align-items: flex-end; 
+  align-items: center; 
   gap: 0px; 
-  margin-bottom: 20px; 
+  height: auto;
 }
 
 .man-image-wrapper {
@@ -215,13 +200,15 @@
   transform-origin: bottom right;
   border-radius: 0;
   margin-right: -15px;
+  align-self: end; /* Mantém a imagem presa ao chão/base */
 }
 
 .hero-man-integrated {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center top;
+  height: auto;
+  max-height: 80vh; 
+  object-fit: contain;
+  object-position: bottom center;
   filter: none;
 }
 
@@ -238,18 +225,24 @@
   filter: blur(15px);
 }
 
+/* --- CARD DE SIMULAÇÃO (ATUALIZADO) --- */
 .sim-card-right {
   flex: 1.2;
   background: linear-gradient(145deg, rgba(11, 37, 82, 0.95) 0%, rgba(37, 99, 235, 0.2) 100%);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255,255,255,0.15);
   border-radius: 20px; 
-  padding: 2rem;
+  
+  /* AUMENTADO: Padding maior verticalmente e altura mínima */
+  padding: 3rem 2rem; 
+  min-height: 400px; /* Força o card a ficar mais alto */
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
   z-index: 10; 
   box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+  margin-bottom: 0px;
 }
 
 .sim-card-title {
@@ -312,7 +305,7 @@
   align-items: center;
   color: #b4c6e0;
   font-size: 0.9rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2rem; /* Espaço um pouco maior antes do botão */
   cursor: pointer;
 }
 .sim-checkbox-label input { display: none; }
@@ -342,7 +335,7 @@
   color: white;
   font-weight: 700;
   border: none;
-  padding: 16px;
+  padding: 16px; /* Botão mais gordinho */
   border-radius: 8px;
   font-size: 1.1rem;
   cursor: pointer;
@@ -351,21 +344,94 @@
 }
 .btn-simular-full:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(37, 99, 235, 0.5); }
 
-/* --- MOBILE --- */
+/* --- RESPONSIVIDADE MOBILE / TABLET --- */
 @media (max-width: 1024px) {
-  .hero-content {
-    grid-template-columns: 1fr;
-    padding-top: 2rem;
-    gap: 3rem;
-  }
-  .big-bold-title { font-size: 2.5rem; }
-  .image-sim-container { flex-direction: column; align-items: center; height: auto; gap: 0; }
-  .man-image-wrapper { transform: none; border-radius: 0; height: 300px; margin-right: 0; }
-  .sim-card-right { border-radius: 20px; padding: 1.5rem; width: 100%; margin-top: -20px; }
   
-  /* Ajuste microprovas mobile */
+  /* Centraliza Logo no Mobile */
+  .navbar {
+    justify-content: center;
+  }
+  
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    padding-top: 1rem;
+    gap: 2.5rem; 
+  }
+
+  .text-column {
+    order: 1; 
+    text-align: center;
+    padding: 1rem 0;
+  }
+  
+  .image-sim-container {
+    order: 2; 
+    width: 100%;
+  }
+  
   .micro-proofs-container {
-    flex-direction: column; /* Volta para coluna no mobile para não quebrar */
-    gap: 1rem;
+    order: 3; 
+    flex-direction: column; 
+    align-items: flex-start; /* Alinhamento à esquerda */
+    gap: 1.5rem;
+    padding-top: 0;
+    border-top: none; 
+    margin-top: -1rem;
+  }
+
+  /* --- ESTILOS ESPECÍFICOS MOBILE --- */
+
+  .big-bold-title {
+    font-size: 2.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .description-clean {
+    font-size: 1rem;
+    margin: 0 auto 1.5rem auto;
+  }
+  
+  .context-line {
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+  
+  .cta-block {
+    align-items: center;
+    width: 100%;
+  }
+  
+  .btn-primary-solid {
+    width: 100%;
+    justify-content: center;
+    padding: 14px;
+  }
+
+  .cta-arrow {
+    transform: rotate(90deg); /* Seta para baixo */
+  }
+
+  .man-image-wrapper {
+    display: none;
+  }
+  
+  .floor-shadow {
+    display: none;
+  }
+
+  /* Reset do Card no Mobile para não ficar gigante */
+  .sim-card-right {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    min-height: auto; /* Remove altura mínima fixa */
+    padding: 2rem 1.5rem; /* Padding normal */
+  }
+}
+
+@media (max-width: 400px) {
+  .big-bold-title {
+    font-size: 1.8rem;
   }
 }

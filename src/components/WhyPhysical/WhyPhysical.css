@@ -5,11 +5,13 @@
   position: relative;
   width: 100%;
   
-  /* Ajuste de padding para o conteúdo não bater no corte */
-  padding: 10rem 5% 6rem;
+  /* AJUSTE RESPONSIVO DO PADDING:
+     Calcula o espaço baseado na inclinação (10vw) + um respiro (4rem).
+     Isso impede que o título fique 'dentro' do corte em telas grandes
+     e remove o espaço excessivo em telas pequenas. */
+  padding: calc(10vw + 4rem) 5% 6rem;
   
-  /* 1. O FUNDO DO CONTAINER VOLTA A SER O GRADIENTE ESCURO (O "antigo") */
-  /* Essa cor aparecerá apenas na área "cortada" do triângulo */
+  /* Fundo Escuro (que aparece no triângulo cortado) */
   background-color: #01050a;
   background-image: 
     linear-gradient(180deg, #071124 0%, rgba(1, 5, 10, 0) 95%),
@@ -18,12 +20,9 @@
   font-family: 'Inter', sans-serif;
   color: #334155; 
   overflow: hidden;
-  
-  /* IMPORTANTE: Removemos o clip-path daqui, pois ele cortaria o gradiente também */
 }
 
 /* 2. A CAMADA BRANCA (Pseudo-elemento) */
-/* Isso cria um fundo branco falso que fica por cima do gradiente */
 .why-wrapper::before {
   content: "";
   position: absolute;
@@ -31,13 +30,15 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #ffffff; /* A cor principal da seção */
+  background-color: #ffffff;
   
-  /* O CORTE ACONTECE AQUI NA CAMADA BRANCA */
-  /* A área definida pelo polígono fica branca. O que fica de fora (o triângulo no topo esquerdo) fica transparente e mostra o gradiente de baixo. */
-  clip-path: polygon(0 20%, 100% 0, 100% 100%, 0 100%);
+  /* --- A CORREÇÃO DO ÂNGULO --- */
+  /* Substituímos '20%' (que varia com a altura) por '10vw' (que varia com a largura).
+     Isso mantém o ângulo da diagonal constante em qualquer dispositivo. 
+     Se quiser mais inclinado, aumente para 12vw ou 15vw. */
+  clip-path: polygon(0 10vw, 100% 0, 100% 100%, 0 100%);
   
-  z-index: 0; /* Garante que fique atrás do texto */
+  z-index: 0; 
 }
 
 .why-container {
@@ -46,7 +47,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  z-index: 1; /* Garante que o conteúdo fique na frente da camada branca */
+  z-index: 1; 
 }
 
 /* --- HEADER INTERNO --- */
@@ -78,7 +79,6 @@
   letter-spacing: -1px;
   margin-bottom: 1rem;
   
-  /* Gradiente no texto do título para manter a identidade */
   background: linear-gradient(135deg, #020610 0%, #1e3a8a 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -209,7 +209,10 @@
 
 @media (max-width: 768px) {
   .why-wrapper {
-    padding: 8rem 5% 4rem;
+    /* Padding ajustado via calc() no topo, mas garantindo espaçamento lateral */
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-bottom: 4rem;
   }
 
   .feature-card {
