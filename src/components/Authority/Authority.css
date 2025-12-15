@@ -67,7 +67,7 @@
   height: 100%; 
   
   /* O 'fixed' real acontece aqui: a imagem fica presa na tela */
-  /* background-attachment: fixed; */
+  background-attachment: fixed;
   
   /* DESKTOP: Encostada na esquerda */
   background-position: left center;

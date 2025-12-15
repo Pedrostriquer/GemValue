@@ -20,6 +20,8 @@
   font-family: 'Inter', sans-serif;
   color: #334155; 
   overflow: hidden;
+  z-index: 1; 
+
 }
 
 /* 2. A CAMADA BRANCA (Pseudo-elemento) */
@@ -38,7 +40,7 @@
      Se quiser mais inclinado, aumente para 12vw ou 15vw. */
   clip-path: polygon(0 10vw, 100% 0, 100% 100%, 0 100%);
   
-  z-index: 0; 
+  z-index: 2; 
 }
 
 .why-container {
@@ -47,7 +49,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  z-index: 1; 
+  z-index: 2; 
 }
 
 /* --- HEADER INTERNO --- */
