@@ -84,29 +84,41 @@ const Hero = () => {
   };
 
   // --- Coreografia de Animação (Framer Motion) ---
+  // OTIMIZAÇÃO: Animações mais rápidas e leves
   const containerSeq = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
-      transition: { duration: 0.8, when: "beforeChildren", staggerChildren: 0.2 }
+      transition: { 
+        duration: 0.5, // Reduzido de 0.8
+        when: "beforeChildren", 
+        staggerChildren: 0.1 // Reduzido de 0.2 (muito mais rápido)
+      }
     }
   };
 
   const textReveal = {
-    hidden: { y: 30, opacity: 0 },
+    hidden: { y: 20, opacity: 0 }, // Reduzido Y de 30 para 20 (menos movimento)
     show: { 
       y: 0, 
       opacity: 1, 
-      transition: { duration: 0.8, ease: "easeOut", type: "spring", stiffness: 100 } 
+      transition: { 
+        duration: 0.6, // Reduzido de 0.8
+        ease: "easeOut" // 'spring' removido para aliviar cálculo
+      } 
     }
   };
 
   const imageSimReveal = {
-    hidden: { x: 50, opacity: 0 },
+    hidden: { x: 30, opacity: 0 }, // Reduzido X de 50 para 30
     show: { 
       x: 0, 
       opacity: 1, 
-      transition: { duration: 1, ease: "easeOut", delay: 0.4 } 
+      transition: { 
+        duration: 0.8, // Reduzido de 1.0
+        ease: "easeOut", 
+        delay: 0.2 // Reduzido de 0.4
+      } 
     }
   };
 
@@ -120,7 +132,7 @@ const Hero = () => {
           className="brand"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.8 }}
         >
           <img src={logo3D} alt="GemValue" className="brand-logo-3d" />
           <span className="brand-text-gradient">GemValue</span>

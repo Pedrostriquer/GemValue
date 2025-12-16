@@ -1,49 +1,110 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  Instagram, 
-  Facebook, 
-  Linkedin, 
-  Youtube, 
-  Gem,
-  FileText,
-  ShieldCheck,
-  MapPin,
-  Mail,
-  Phone,
-  MessageCircle,
-  X
+  Instagram, Facebook, Linkedin, Youtube, 
+  Gem, FileText, ShieldCheck, MapPin, 
+  Mail, Phone, MessageCircle, X
 } from 'lucide-react';
 import './Footer.css';
 
-// --- Textos dos Modais ---
+// --- CONSTANTES ESTÁTICAS (Não pesam no render) ---
+const CURRENT_YEAR = new Date().getFullYear();
+
+// === TEXTO COMPLETO: TERMOS DE USO ===
 const TERMS_TEXT = (
-  <>
-    <p><strong>1. Natureza da plataforma</strong></p>
-    <p>A GemValue atua como uma plataforma informativa, voltada à apresentação de estruturas baseadas em ativos físicos, formalizadas por contrato com a Gemas Brilhantes.</p>
-    <br/>
+  <div className="legal-text-content">
     <p>Ao acessar e utilizar a plataforma GemValue, o usuário declara estar de acordo com os presentes Termos de Uso e com a Política de Privacidade.</p>
     <p>A GemValue é uma plataforma desenvolvida e operada pela Gemas Brilhantes, responsável legal pelas informações e estruturas apresentadas.</p>
-  </>
+
+    <h3>1. Natureza da plataforma</h3>
+    <p>A GemValue atua como uma plataforma informativa, voltada à apresentação de estruturas baseadas em ativos físicos, formalizadas por contrato com a Gemas Brilhantes.</p>
+    <p>As informações disponibilizadas possuem caráter informativo e não constituem oferta pública, promessa ou recomendação financeira.</p>
+
+    <h3>2. Não caracterização como instituição financeira</h3>
+    <p>A GemValue e a Gemas Brilhantes não são instituições financeiras, não realizam captação pública de recursos, nem intermediação de valores mobiliários.</p>
+
+    <h3>3. Uso da plataforma</h3>
+    <p>O usuário compromete-se a utilizar a plataforma de forma lícita, ética e responsável, fornecendo informações verdadeiras quando solicitado.</p>
+
+    <h3>4. Propriedade intelectual</h3>
+    <p>Todo o conteúdo disponibilizado na plataforma é de propriedade da Gemas Brilhantes, sendo vedada sua reprodução sem autorização.</p>
+
+    <h3>5. Limitação de responsabilidade</h3>
+    <p>A Gemas Brilhantes não se responsabiliza por decisões tomadas pelo usuário com base nas informações disponibilizadas na plataforma.</p>
+
+    <h3>6. Alterações e legislação aplicável</h3>
+    <p>Estes Termos de Uso podem ser atualizados a qualquer momento e são regidos pelas leis da República Federativa do Brasil.</p>
+
+    <p className="legal-update">Última atualização: Janeiro de 2025</p>
+  </div>
 );
 
+// === TEXTO COMPLETO: POLÍTICA DE PRIVACIDADE ===
 const PRIVACY_TEXT = (
-  <>
-    <p><strong>Política de Privacidade</strong></p>
-    <p>Esta política descreve como a GemValue coleta, usa e protege suas informações pessoais.</p>
-    <br/>
-    <p><em>(Insira aqui o texto completo da sua Política de Privacidade...)</em></p>
-  </>
+  <div className="legal-text-content">
+    <p>A presente Política de Privacidade tem como objetivo informar, de forma clara e transparente, como os dados pessoais dos usuários são coletados, utilizados, armazenados e protegidos ao acessar e utilizar a plataforma GemValue.</p>
+    <p>A GemValue é uma plataforma desenvolvida e operada pela Gemas Brilhantes, responsável legal pelo tratamento dos dados pessoais aqui descritos.</p>
+
+    <h3>1. Quem somos</h3>
+    <p>GemValue é uma plataforma digital vinculada à Gemas Brilhantes, especializada em estruturas baseadas em ativos físicos e operações comerciais lastreadas no mercado real de gemas preciosas.</p>
+    <p><strong>Responsável legal:</strong><br/>Gemas Brilhantes<br/>CNPJ: 50.793.164/0001-91</p>
+
+    <h3>2. Quais dados coletamos</h3>
+    <p>Podemos coletar os seguintes dados pessoais, de forma direta ou indireta:</p>
+    <ul>
+      <li>Nome completo</li>
+      <li>Endereço de e-mail</li>
+      <li>Número de telefone (WhatsApp)</li>
+      <li>Informações fornecidas em formulários de contato ou simulação</li>
+      <li>Endereço IP e dados de navegação</li>
+      <li>Informações sobre dispositivo e navegador</li>
+    </ul>
+    <p>A coleta ocorre quando o usuário preenche formulários no site, solicita contato com um especialista ou interage com anúncios e conteúdos.</p>
+
+    <h3>3. Finalidade do uso dos dados</h3>
+    <p>Os dados coletados são utilizados para:</p>
+    <ul>
+      <li>Entrar em contato com o usuário quando solicitado</li>
+      <li>Enviar informações relacionadas às estruturas apresentadas</li>
+      <li>Prestar atendimento, suporte e esclarecimento de dúvidas</li>
+      <li>Cumprir obrigações legais e regulatórias</li>
+      <li>Melhorar a experiência de navegação e realizar análises internas</li>
+    </ul>
+
+    <h3>4. Compartilhamento de dados</h3>
+    <p>Os dados pessoais poderão ser compartilhados apenas quando necessário, com ferramentas de atendimento e CRM, plataformas de automação de marketing e serviços de infraestrutura tecnológica.</p>
+    <p>A Gemas Brilhantes <strong>não comercializa</strong>, vende ou repassa dados pessoais a terceiros para fins indevidos.</p>
+
+    <h3>5. Armazenamento e segurança dos dados</h3>
+    <p>Adotamos medidas técnicas e organizacionais adequadas para proteger os dados pessoais contra acesso não autorizado, perda, alteração ou destruição indevida.</p>
+
+    <h3>6. Direitos do titular dos dados</h3>
+    <p>Nos termos da LGPD, o usuário tem direito a confirmar a existência de tratamento, acessar seus dados, solicitar correção, exclusão ou anonimização, e revogar consentimentos.</p>
+
+    <h3>7. Cookies e tecnologias de rastreamento</h3>
+    <p>A plataforma pode utilizar cookies para melhorar a experiência do usuário e analisar padrões de navegação. O usuário pode gerenciar cookies diretamente em seu navegador.</p>
+
+    <h3>8. Aviso legal importante</h3>
+    <p>A GemValue não é uma instituição financeira e não realiza captação pública de recursos. As informações têm caráter informativo sobre operações comerciais com lastro físico.</p>
+
+    <h3>9. Alterações nesta Política</h3>
+    <p>Esta Política de Privacidade pode ser atualizada a qualquer momento. Recomendamos a revisão periódica deste documento.</p>
+
+    <h3>10. Contato</h3>
+    <p>Em caso de dúvidas, entre em contato pelos canais oficiais da Gemas Brilhantes.</p>
+
+    <p className="legal-update">Última atualização: Janeiro de 2025</p>
+  </div>
 );
 
-// --- Componente de Animação Reutilizável ---
+// --- Componente de Animação Otimizado (Sem Blur) ---
 const AnimatedContainer = ({ children, delay = 0 }) => {
   return (
     <motion.div
-      initial={{ filter: 'blur(4px)', y: -10, opacity: 0 }}
-      whileInView={{ filter: 'blur(0px)', y: 0, opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay, duration: 0.8 }}
+      initial={{ y: 20, opacity: 0 }}
+      whileInView={{ y: 0, opacity: 1 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ delay, duration: 0.6, ease: "easeOut" }}
       className="footer-anim-wrapper"
     >
       {children}
@@ -59,16 +120,20 @@ const LegalModal = ({ isOpen, onClose, title, content }) => {
     <div className="modal-overlay" onClick={onClose}>
       <motion.div 
         className="modal-content"
-        initial={{ scale: 0.8, opacity: 0 }}
+        initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.8, opacity: 0 }}
-        onClick={(e) => e.stopPropagation()} // Evita fechar ao clicar dentro
+        exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        onClick={(e) => e.stopPropagation()} 
       >
-        <button className="modal-close-btn" onClick={onClose}>
-          <X size={24} />
-        </button>
-        <h2 className="modal-title">{title}</h2>
-        <div className="modal-body">
+        <div className="modal-header">
+           <h2 className="modal-title">{title}</h2>
+           <button className="modal-close-btn" onClick={onClose} aria-label="Fechar">
+             <X size={24} />
+           </button>
+        </div>
+        
+        <div className="modal-body-scroll">
           {content}
         </div>
       </motion.div>
@@ -77,19 +142,19 @@ const LegalModal = ({ isOpen, onClose, title, content }) => {
 };
 
 const Footer = () => {
-  const currentYear = 2025;
-  const [activeModal, setActiveModal] = useState(null); // 'terms' | 'privacy' | null
+  const [activeModal, setActiveModal] = useState(null); 
 
-  const openModal = (type, e) => {
+  const openModal = useCallback((type, e) => {
     e.preventDefault();
     setActiveModal(type);
-  };
+  }, []);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setActiveModal(null);
-  };
+  }, []);
 
-  const footerLinks = [
+  // useMemo para lista de links estática
+  const footerLinks = useMemo(() => [
     {
       label: 'Legal',
       links: [
@@ -97,13 +162,13 @@ const Footer = () => {
           title: 'Termos de Uso', 
           href: '#', 
           icon: FileText, 
-          onClick: (e) => openModal('terms', e) 
+          action: (e) => openModal('terms', e) 
         },
         { 
           title: 'Política de Privacidade', 
           href: '#', 
           icon: ShieldCheck,
-          onClick: (e) => openModal('privacy', e)
+          action: (e) => openModal('privacy', e)
         },
       ],
     },
@@ -121,21 +186,20 @@ const Footer = () => {
       links: [
         { title: 'Av. Rep. Argentina, 1336 - Água Verde, Curitiba - PR', href: '#', icon: MapPin },
         { title: 'suporte@gemasbrilhantes.com.br', href: 'mailto:suporte@gemasbrilhantes.com.br', icon: Mail },
-        { title: 'Whatsapp: 0800-000-4998', href: 'https://wa.me/5508000004998', icon: MessageCircle }, // Link formatado
+        { title: 'Whatsapp: 0800-000-4998', href: 'https://wa.me/5508000004998', icon: MessageCircle },
         { title: 'SAC: 51 9984-1455', href: 'tel:+555199841455', icon: Phone },
       ],
     },
-  ];
+  ], [openModal]); 
 
   return (
     <footer className="footer-wrapper">
-      {/* Luz e Linha do Topo */}
       <div className="footer-glow-line"></div>
       
       <div className="footer-container">
         <div className="footer-grid">
           
-          {/* COLUNA 1: MARCA E INFO */}
+          {/* COLUNA 1: MARCA */}
           <AnimatedContainer delay={0}>
             <div className="footer-brand-col">
               <div className="footer-logo-box">
@@ -154,15 +218,15 @@ const Footer = () => {
               
               <div className="footer-cnpj">
                 <span>Gemas Brilhantes – CNPJ: 50.793.164/0001-91</span>
-                <span className="copyright">© {currentYear} GemValue. Todos os direitos reservados.</span>
+                <span className="copyright">© {CURRENT_YEAR} GemValue. Todos os direitos reservados.</span>
               </div>
             </div>
           </AnimatedContainer>
 
-          {/* COLUNA 2, 3 e 4: LINKS */}
+          {/* COLUNAS LINKS */}
           <div className="footer-links-area">
             {footerLinks.map((section, index) => (
-              <AnimatedContainer key={section.label} delay={0.2 + (index * 0.1)}>
+              <AnimatedContainer key={section.label} delay={0.1 + (index * 0.1)}>
                 <div className="footer-column">
                   <h3 className="column-title">{section.label}</h3>
                   <ul className="link-list">
@@ -171,11 +235,11 @@ const Footer = () => {
                         <a 
                           href={link.href} 
                           className="footer-link"
-                          onClick={link.onClick ? link.onClick : undefined}
+                          onClick={link.action || undefined}
                           target={link.href.startsWith('http') ? "_blank" : "_self"}
-                          rel="noreferrer"
+                          rel={link.href.startsWith('http') ? "noopener noreferrer" : undefined}
                         >
-                          {link.icon && <link.icon size={16} style={{ flexShrink: 0 }} />}
+                          {link.icon && React.createElement(link.icon, { size: 16, style: { flexShrink: 0 } })}
                           <span>{link.title}</span>
                         </a>
                       </li>
@@ -189,7 +253,7 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* MODAL VIA PORTAL/ANIMAÇÃO */}
+      {/* MODAL */}
       <AnimatePresence>
         {activeModal && (
           <LegalModal 

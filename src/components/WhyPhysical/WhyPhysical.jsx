@@ -39,20 +39,13 @@ const WhyPhysical = () => {
     }
   ];
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.15, delayChildren: 0.2 }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
+  // Variante Simplificada (Sem delays complexos que causam "piscada")
+  const simpleFadeUp = {
+    hidden: { opacity: 0, y: 20 },
     visible: { 
-      y: 0, 
       opacity: 1, 
-      transition: { type: "spring", stiffness: 50 } 
+      y: 0, 
+      transition: { duration: 0.5, ease: "easeOut" } 
     }
   };
 
@@ -62,37 +55,23 @@ const WhyPhysical = () => {
         
         <div className="why-content-grid">
           
-          {/* COLUNA ESQUERDA: TÍTULO + TEXTO EXPLICATIVO */}
+          {/* COLUNA ESQUERDA */}
           <motion.div 
             className="why-text-col"
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={simpleFadeUp}
           >
-            {/* --- BLOCO DO TÍTULO MOVIDO PARA CÁ --- */}
             <div className="why-header-internal">
-              <motion.span 
-                className="section-tag"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                viewport={{ once: true }}
-              >
+              <span className="section-tag">
                 BLOCO 2 – POR QUE ATIVOS FÍSICOS
-              </motion.span>
+              </span>
               
-              <motion.h2 
-                className="why-title"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 }}
-                viewport={{ once: true }}
-              >
+              <h2 className="why-title">
                 Por que investidores buscam ativos físicos fora do mercado tradicional
-              </motion.h2>
+              </h2>
             </div>
-            {/* -------------------------------------- */}
 
             <p className="highlight-text">
               Em cenários de volatilidade, mudanças regulatórias e excesso de instrumentos financeiros, 
@@ -107,20 +86,21 @@ const WhyPhysical = () => {
             <div className="decorative-line"></div>
           </motion.div>
 
-          {/* COLUNA DIREITA: CARDS (BULLETS) */}
-          <motion.div 
-            className="why-cards-col"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
+          {/* COLUNA DIREITA: CARDS */}
+          <div className="why-cards-col">
             {features.map((item, index) => (
               <motion.div 
                 key={index} 
-                className="feature-card" 
-                variants={itemVariants}
-                whileHover={{ scale: 1.02, backgroundColor: "rgba(37, 99, 235, 0.1)" }}
+                className="feature-card"
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ 
+                  duration: 0.4, 
+                  delay: index * 0.1, // Stagger manual simples (mais estável)
+                  ease: "easeOut" 
+                }}
+                whileHover={{ scale: 1.02 }} // Apenas escala, sem cor de fundo
               >
                 <div className="card-icon-wrapper">
                   {item.icon}
@@ -131,7 +111,7 @@ const WhyPhysical = () => {
                 </div>
               </motion.div>
             ))}
-          </motion.div>
+          </div>
 
         </div>
       </div>
