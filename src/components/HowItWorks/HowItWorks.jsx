@@ -6,11 +6,12 @@ import {
   ShieldCheck, 
   Vault, 
   TrendingUp, 
-  Gavel 
+  Gavel,
+  MessageCircle 
 } from 'lucide-react';
 import './HowItWorks.css';
 
-// Importa o novo efeito
+// Importa o efeito de brilho
 import { GlowingEffect } from '../ui/GlowingEffect';
 
 const HowItWorks = () => {
@@ -53,6 +54,12 @@ const HowItWorks = () => {
       desc: "Total autonomia para liquidar o ativo ou mantê-lo como herança patrimonial." 
     }
   ];
+
+  const handleCtaClick = () => {
+    const phoneNumber = "5508000004998"; 
+    const message = "Olá, entendi o fluxo operacional do GemCash e gostaria de saber mais detalhes sobre como iniciar minha aquisição.";
+    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+  };
 
   return (
     <section className="how-wrapper">
@@ -111,6 +118,28 @@ const HowItWorks = () => {
           </div>
 
         </div>
+
+        {/* CTA BUTTON AREA */}
+        <motion.div 
+            className="how-cta-wrapper"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6 }}
+        >
+            <motion.button 
+                className="btn-gemcash-glass"
+                onClick={handleCtaClick}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+            >
+                <div className="glass-btn-icon">
+                    <MessageCircle size={20} />
+                </div>
+                <span>Quero saber mais sobre o GemCash</span>
+            </motion.button>
+        </motion.div>
+
       </div>
     </section>
   );

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowRight, ShieldCheck, Building2, FileText, Info, 
-  Loader2, RefreshCw, DollarSign, Calendar, Check 
+  Loader2, RefreshCw, DollarSign, Calendar, Check, MessageCircle
 } from 'lucide-react';
 
 // SERVIÇOS E CONTEXTO
@@ -26,8 +26,9 @@ const Hero = () => {
   // Estados de Resultado e UI
   const [simResult, setSimResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  // Removi o estado isAnimating separado, pois ele causava o delay. 
-  // Agora usamos o próprio isLoading para controlar o visual.
+  
+  // Estado para mensagem do WhatsApp
+  const [contactMessage, setContactMessage] = useState('');
 
   // Sincronizar defaults
   useEffect(() => {
@@ -40,12 +41,16 @@ const Hero = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, minAmount, availableMonths]); 
 
-  // --- OTIMIZAÇÃO: Simulação Instantânea (Sem setTimeout) ---
+  // Quando houver resultado, define a mensagem padrão
+  useEffect(() => {
+    if (simResult) {
+      setContactMessage("Olá, fiz uma simulação no site e gostaria de saber como consolidar esse resultado diversificando meu patrimônio com ativos físicos.");
+    }
+  }, [simResult]);
+
   const handleSimulateClick = useCallback(async () => {
     if (!isLoaded) return;
-
     setIsLoading(true);
-    
     try {
       const result = await contractService.simulate({
         amount: valor,
@@ -56,14 +61,37 @@ const Hero = () => {
     } catch (error) {
       console.error("Erro na simulação:", error);
     } finally {
-      // REMOVIDO: setTimeout(() => setIsAnimating(false), 500);
-      // A atualização agora é síncrona e instantânea
       setIsLoading(false);
     }
   }, [isLoaded, valor, prazo, receberFisico]);
 
   const formatCurrency = (val) => 
     val ? val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
+
+  // Função para enviar para o WhatsApp
+  const handleContactClick = () => {
+    if (!simResult) return;
+
+    const breakLine = "%0A";
+    const boldStart = "*";
+    const boldEnd = "*";
+
+    // Monta a mensagem completa com dados técnicos para o consultor
+    const finalMessage = 
+      `${contactMessage}` +
+      `${breakLine}${breakLine}` +
+      `--------------------------------` +
+      `${breakLine}${boldStart}📊 Detalhes da Simulação:${boldEnd}` +
+      `${breakLine}💰 Aporte: ${formatCurrency(valor)}` +
+      `${breakLine}📅 Prazo: ${prazo} meses` +
+      `${breakLine}💎 Gema Física: ${receberFisico ? 'Sim' : 'Não'}` +
+      `${breakLine}🚀 Valor Final Est.: ${formatCurrency(simResult.finalAmount)}` +
+      `${breakLine}📈 Lucro Total: ${formatCurrency(simResult.totalGain)}` +
+      `${breakLine}--------------------------------`;
+
+    const phoneNumber = "5508000004998"; 
+    window.open(`https://wa.me/${phoneNumber}?text=${finalMessage}`, '_blank');
+  };
 
   const prazoIndex = availableMonths.indexOf(prazo) !== -1 ? availableMonths.indexOf(prazo) : 0;
   
@@ -72,44 +100,21 @@ const Hero = () => {
     if (availableMonths[index]) setPrazo(availableMonths[index]);
   };
 
-  // --- OTIMIZAÇÃO: Configurações de Animação Leves (GPU Friendly) ---
-  // Usamos useMemo para que o React não recrie esses objetos a cada render
   const animations = useMemo(() => ({
     containerSeq: {
       hidden: { opacity: 0 },
       show: {
         opacity: 1,
-        transition: { 
-          duration: 0.3, // Mais rápido
-          when: "beforeChildren", 
-          staggerChildren: 0.05 // Quase simultâneo (reduz sensação de lerdeza)
-        }
+        transition: { duration: 0.3, when: "beforeChildren", staggerChildren: 0.05 }
       }
     },
     textReveal: {
-      hidden: { y: 10, opacity: 0 }, // Movimento menor (10px) exige menos repaint
-      show: { 
-        y: 0, 
-        opacity: 1, 
-        transition: { 
-          type: "tween", // 'tween' é mais leve que 'spring'
-          duration: 0.4,
-          ease: "easeOut" 
-        } 
-      }
+      hidden: { y: 10, opacity: 0 },
+      show: { y: 0, opacity: 1, transition: { type: "tween", duration: 0.4, ease: "easeOut" } }
     },
     imageSimReveal: {
       hidden: { x: 20, opacity: 0 },
-      show: { 
-        x: 0, 
-        opacity: 1, 
-        transition: { 
-          type: "tween",
-          duration: 0.5, 
-          ease: "easeOut", 
-          delay: 0.1 
-        } 
-      }
+      show: { x: 0, opacity: 1, transition: { type: "tween", duration: 0.5, ease: "easeOut", delay: 0.1 } }
     }
   }), []);
 
@@ -120,7 +125,7 @@ const Hero = () => {
       <nav className="navbar">
         <motion.div 
           className="brand"
-          initial={{ opacity: 0 }} // Removemos o Y na navbar para carregar mais rápido visualmente
+          initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
@@ -188,7 +193,6 @@ const Hero = () => {
               src={manInChair} 
               alt="Consultor" 
               className="hero-man-integrated"
-              // Dica de performance para navegador priorizar esta imagem
               fetchPriority="high" 
             />
           </div>
@@ -257,14 +261,12 @@ const Hero = () => {
 
             {/* Resultado da Simulação */}
             <div className="hero-card-result">
-              <span className="hero-result-label">Valor Final Estimado</span>
               
-              {/* mode='wait' garante que um saia antes do outro entrar, mas com duração curta é rapido */}
               <AnimatePresence mode='wait'>
                 {isLoading ? (
                   <motion.div 
                     key="loader"
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                     className="hero-loader-wrapper"
                   >
                     <Loader2 size={32} className="spin-anim text-emerald-400" />
@@ -272,21 +274,22 @@ const Hero = () => {
                 ) : !simResult ? (
                    <motion.div 
                      key="placeholder"
-                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.1 } }}
+                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                      className="hero-result-placeholder"
                    >
-                     Clique abaixo para calcular a projeção
+                     <span className="hero-result-label">Resultado Estimado</span>
+                     <p>Clique abaixo para calcular a projeção</p>
                    </motion.div>
                 ) : (
                   <motion.div 
                     key="result"
-                    initial={{ opacity: 0, scale: 0.95 }} // Scale sutil em vez de Y
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }} 
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3, ease: "easeOut" }} // Transição rápida
+                    transition={{ duration: 0.3, ease: "easeOut" }}
                     className="hero-result-content"
                   >
-                     {/* Removi a classe 'blur-effect' condicional, pois não queremos delay */}
+                     <span className="hero-result-label">Valor Final Estimado</span>
                      <div className="hero-result-big-value">
                         {formatCurrency(simResult.finalAmount)}
                      </div>
@@ -300,6 +303,7 @@ const Hero = () => {
                             <span className="h-det-label">Ganho Mensal</span>
                             <span className="h-det-value">{formatCurrency(simResult.monthlyGain)}</span>
                         </div>
+                        {/* RESTAURADO O LUCRO TOTAL */}
                         <div className="hero-detail-item">
                             <span className="h-det-label">Lucro Total</span>
                             <span className="h-det-value text-blue">{formatCurrency(simResult.totalGain)}</span>
@@ -310,14 +314,45 @@ const Hero = () => {
               </AnimatePresence>
             </div>
 
-            <button 
-                className="hero-btn-refazer" 
-                onClick={handleSimulateClick}
-                disabled={isLoading || !isLoaded}
-            >
-              <RefreshCw size={18} className={isLoading ? 'spin-anim' : ''} />
-              {isLoading ? "Calculando..." : (simResult ? "Recalcular Simulação" : "Simular Agora")}
-            </button>
+            {/* ÁREA DE AÇÃO (Botões) */}
+            <div className="hero-actions-area">
+                {!simResult || isLoading ? (
+                    <button 
+                        className="hero-btn-refazer primary-action" 
+                        onClick={handleSimulateClick}
+                        disabled={isLoading || !isLoaded}
+                    >
+                    <RefreshCw size={18} className={isLoading ? 'spin-anim' : ''} />
+                    {isLoading ? "Calculando..." : "Simular Agora"}
+                    </button>
+                ) : (
+                    // INPUT + BOTÃO PULSANTE
+                    <motion.div 
+                        className="hero-contact-wrapper"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                    >
+                        <div className="hero-msg-input-box">
+                            <textarea 
+                                className="hero-msg-textarea"
+                                value={contactMessage}
+                                onChange={(e) => setContactMessage(e.target.value)}
+                                rows={3}
+                            />
+                        </div>
+
+                        {/* Classe 'pulse-anim-btn' adicionada para o efeito sutil */}
+                        <button className="btn-contact-action pulse-anim-btn" onClick={handleContactClick}>
+                            <MessageCircle size={20} />
+                            Falar com Consultor
+                        </button>
+
+                        <button className="btn-text-only-refazer" onClick={handleSimulateClick}>
+                            Refazer simulação
+                        </button>
+                    </motion.div>
+                )}
+            </div>
             
           </div>
         </motion.div>

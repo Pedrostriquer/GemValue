@@ -5,11 +5,12 @@ import {
   TrendingDown, 
   Landmark, 
   FileKey, 
-  Sprout 
+  Sprout,
+  ArrowRight 
 } from 'lucide-react';
 import './WhyPhysical.css';
 
-// Mover dados e variantes para fora do componente evita recriação a cada render (Melhora performance)
+// Mover dados e variantes para fora do componente evita recriação a cada render
 const features = [
   {
     icon: <Gem size={24} />,
@@ -44,7 +45,7 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1, // Controla o tempo entre um card e outro
+      staggerChildren: 0.1,
       delayChildren: 0.1
     }
   }
@@ -60,6 +61,13 @@ const itemVariants = {
 };
 
 const WhyPhysical = () => {
+
+  const handleCtaClick = () => {
+    const phoneNumber = "5508000004998"; 
+    const message = "Olá, estava vendo os benefícios dos ativos físicos no site e gostaria de visualizar uma estratégia personalizada para meu patrimônio.";
+    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+  };
+
   return (
     <section className="why-wrapper" id="modelo">
       <div className="why-container">
@@ -71,7 +79,6 @@ const WhyPhysical = () => {
             className="why-text-col"
             initial="hidden"
             whileInView="visible"
-            // viewport margin ajustada para carregar um pouco antes de aparecer totalmente
             viewport={{ once: true, margin: "0px 0px -100px 0px" }}
             variants={itemVariants}
           >
@@ -95,11 +102,44 @@ const WhyPhysical = () => {
               funcionando como reserva de valor e proteção patrimonial insubstituível.
             </p>
             
-            <div className="decorative-line"></div>
+            {/* NOVO LINK INTERATIVO */}
+            <div className="why-action-area">
+                <div className="decorative-line"></div>
+                
+                <motion.div 
+                    className="visualize-link"
+                    onClick={handleCtaClick}
+                    whileHover="hover"
+                    initial="rest"
+                    animate="rest"
+                >
+                    <span className="visualize-text">Visualize uma estratégia baseada em ativos físicos</span>
+                    
+                    <motion.div
+                        className="arrow-anim-wrapper"
+                        variants={{
+                            rest: { x: 0 },
+                            hover: { x: 5 } // Move um pouco mais rápido no hover se quiser, ou deixa só a animação contínua
+                        }}
+                    >
+                        <motion.div
+                             // Animação contínua e suave de "vai e volta"
+                             animate={{ x: [0, 4, 0] }}
+                             transition={{ 
+                                 duration: 2, 
+                                 repeat: Infinity, 
+                                 ease: "easeInOut" 
+                             }}
+                        >
+                            <ArrowRight size={20} />
+                        </motion.div>
+                    </motion.div>
+                </motion.div>
+            </div>
+            
           </motion.div>
 
           {/* COLUNA DIREITA: CARDS */}
-          {/* O container gerencia a animação dos filhos */}
           <motion.div 
             className="why-cards-col"
             variants={containerVariants}
@@ -112,7 +152,6 @@ const WhyPhysical = () => {
                 key={index} 
                 className="feature-card"
                 variants={itemVariants}
-                // REMOVIDO: whileHover do JS (movido para CSS para performance)
               >
                 <div className="card-icon-wrapper">
                   {item.icon}

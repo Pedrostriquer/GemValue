@@ -1,6 +1,6 @@
 import React, { useState, useCallback, memo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, Minus, HelpCircle } from 'lucide-react';
+import { Plus, Minus, HelpCircle, Send, MessageCircle } from 'lucide-react';
 import './FAQ.css';
 
 const FAQ_DATA = [
@@ -128,7 +128,6 @@ const containerVariants = {
   show: {
     opacity: 1,
     transition: {
-      // Reduzi o stagger para ser mais rápido e evitar sensação de "travamento"
       staggerChildren: 0.03, 
       delayChildren: 0
     }
@@ -140,7 +139,7 @@ const itemVariants = {
   show: { 
     opacity: 1, 
     y: 0,
-    transition: { duration: 0.3 } // Transição rápida
+    transition: { duration: 0.3 }
   }
 };
 
@@ -159,7 +158,6 @@ const FAQItem = memo(({ item, isOpen, onClick, index }) => {
     <motion.div 
       className={`faq-item ${isOpen ? 'active' : ''}`}
       variants={itemVariants}
-      // "layout" prop removida propositalmente: ela é pesada e causa flickers em listas longas
     >
       <button 
         className="faq-question" 
@@ -196,10 +194,22 @@ const FAQItem = memo(({ item, isOpen, onClick, index }) => {
 
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [doubt, setDoubt] = useState('');
 
   const toggleFAQ = useCallback((index) => {
     setActiveIndex(prevIndex => prevIndex === index ? null : index);
   }, []);
+
+  const handleSendDoubt = () => {
+    if (!doubt.trim()) return;
+
+    const phoneNumber = "5508000004998";
+    const message = `Olá, estava lendo as perguntas frequentes e fiquei com uma dúvida específica: ${doubt}`;
+    
+    // Abre WhatsApp
+    window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+    setDoubt(''); // Limpa input
+  };
 
   return (
     <section className="faq-wrapper">
@@ -221,11 +231,6 @@ const FAQ = () => {
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
-          // OTIMIZAÇÃO CRUCIAL:
-          // margin: "-50px 0px 0px 0px" significa: dispare a animação quando o elemento 
-          // estiver a 50px de entrar na tela (quase lá).
-          // Se aumentarmos o bottom margin negativo, ele carrega ANTES de aparecer.
-          // "200px" garante que já esteja carregado quando o usuário rolar rápido.
           viewport={{ once: true, margin: "0px 0px -200px 0px" }}
         >
           {FAQ_DATA.map((item, index) => (
@@ -239,10 +244,35 @@ const FAQ = () => {
           ))}
         </motion.div>
         
-        <div className="faq-footer">
-          <p>Ainda tem dúvidas?</p>
-          <button className="btn-contact-simple">Fale com um especialista</button>
-        </div>
+        {/* ÁREA DE DÚVIDA INTERATIVA */}
+        <motion.div 
+            className="faq-footer-interactive"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+        >
+          <p className="faq-footer-label">Sua dúvida não está aqui? Pergunte diretamente:</p>
+          
+          <div className="faq-input-wrapper">
+            <input 
+                type="text"
+                className="faq-doubt-input"
+                placeholder="Escreva sua dúvida aqui..."
+                value={doubt}
+                onChange={(e) => setDoubt(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSendDoubt()}
+            />
+            <button className="btn-send-doubt" onClick={handleSendDoubt} aria-label="Enviar dúvida">
+                <Send size={18} />
+            </button>
+          </div>
+
+          <p className="faq-whatsapp-hint">
+             <MessageCircle size={14} className="text-blue-400" />
+             Resposta direta via WhatsApp
+          </p>
+        </motion.div>
 
       </div>
     </section>

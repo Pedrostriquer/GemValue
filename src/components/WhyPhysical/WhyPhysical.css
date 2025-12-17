@@ -13,7 +13,6 @@
   color: #334155; 
   overflow: hidden;
   z-index: 1; 
-  /* Adiciona renderização de hardware para evitar flickers no fundo */
   backface-visibility: hidden;
   -webkit-font-smoothing: antialiased;
 }
@@ -28,7 +27,7 @@
   background-color: #ffffff;
   clip-path: polygon(0 10vw, 100% 0, 100% 100%, 0 100%);
   z-index: 2; 
-  pointer-events: none; /* Melhora performance de scroll */
+  pointer-events: none;
 }
 
 .why-container {
@@ -67,7 +66,6 @@
   line-height: 1.2;
   font-weight: 700;
   letter-spacing: -1px;
-  /* margin-bottom: 1rem; */
   background: linear-gradient(135deg, #020610 0%, #1e3a8a 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -99,7 +97,6 @@
   color: #1e3a8a; 
   border-left: 4px solid #2563EB;
   padding-left: 20px;
-  /* margin-top: 1rem; */
 }
 
 .body-text {
@@ -111,8 +108,45 @@
 .decorative-line {
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, rgba(37,99,235,0.5) 0%, transparent 100%);
-  margin-top: 2rem;
+  background: linear-gradient(90deg, rgba(37,99,235,0.3) 0%, transparent 100%);
+  margin-bottom: 1.5rem; /* Espaço para o link */
+}
+
+/* --- NOVO LINK DE AÇÃO --- */
+.why-action-area {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.visualize-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    width: fit-content;
+    padding: 8px 0;
+    group: hover; /* Para disparar efeitos */
+}
+
+.visualize-text {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #2563EB; /* Azul Marca */
+    text-decoration: none;
+    transition: color 0.2s ease;
+    border-bottom: 1px solid transparent;
+}
+
+.visualize-link:hover .visualize-text {
+    color: #1e3a8a; /* Azul mais escuro no hover */
+    border-bottom-color: #1e3a8a;
+}
+
+.arrow-anim-wrapper {
+    display: flex;
+    align-items: center;
+    color: #2563EB;
 }
 
 /* --- COLUNA DIREITA (CARDS) --- */
@@ -131,10 +165,8 @@
   background: #f8fafc; 
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  /* Transição via CSS é mais leve que JS */
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   cursor: default;
-  /* Otimização de renderização */
   will-change: transform; 
 }
 
@@ -170,7 +202,6 @@
 }
 
 /* --- INTERAÇÃO (APENAS DESKTOP) --- */
-/* Isso impede o "flicker" e a lentidão no celular */
 @media (hover: hover) {
   .feature-card:hover {
     background: #ffffff;
@@ -208,14 +239,12 @@
     padding-left: 5%;
     padding-right: 5%;
     padding-bottom: 4rem;
-    /* Reduzir o padding top no mobile para não ficar um buraco enorme */
     padding-top: calc(10vw + 3rem);
   }
 
   .feature-card {
     padding: 1.2rem;
     align-items: flex-start;
-    /* No mobile, removemos o gap excessivo */
     gap: 1rem;
   }
 
@@ -225,6 +254,6 @@
   }
   
   .why-title {
-    font-size: 1.8rem; /* Título um pouco menor no mobile */
+    font-size: 1.8rem;
   }
 }

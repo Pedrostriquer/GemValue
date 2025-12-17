@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { RefreshCw, DollarSign, Calendar, Loader2, Check, BarChart3 } from 'lucide-react';
+import { RefreshCw, DollarSign, Calendar, Loader2, Check, BarChart3, MessageCircle } from 'lucide-react';
 import contractService from '../../services/contractService'; 
 import './Simulation.css';
 
@@ -20,7 +20,10 @@ const Simulation = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  // 1. Carregar Regras Iniciais (Executa apenas uma vez)
+  // --- Estado para Mensagem WhatsApp ---
+  const [contactMessage, setContactMessage] = useState('');
+
+  // 1. Carregar Regras Iniciais
   useEffect(() => {
     const fetchRules = async () => {
       try {
@@ -54,12 +57,19 @@ const Simulation = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 2. Função de Simulação (Só roda no Click)
+  // 2. Define Mensagem Padrão ao ter Resultado
+  useEffect(() => {
+    if (simResult) {
+      setContactMessage("Olá, fiz uma simulação no site e gostaria de saber como consolidar esse resultado diversificando meu patrimônio com ativos físicos.");
+    }
+  }, [simResult]);
+
+  // 3. Função de Simulação
   const handleSimulateClick = useCallback(async () => {
     if (!configLoaded) return;
 
     setIsLoading(true);
-    setIsAnimating(true); // Efeito visual de blur/transição
+    setIsAnimating(true);
     
     try {
       const result = await contractService.simulate({
@@ -76,7 +86,29 @@ const Simulation = () => {
     }
   }, [configLoaded, valor, prazo, withGem]);
 
-  // OBS: O useEffect de debounce foi removido propositalmente aqui.
+  // 4. Função de Envio WhatsApp
+  const handleContactClick = () => {
+    if (!simResult) return;
+
+    const breakLine = "%0A";
+    const boldStart = "*";
+    const boldEnd = "*";
+
+    const finalMessage = 
+      `${contactMessage}` +
+      `${breakLine}${breakLine}` +
+      `--------------------------------` +
+      `${breakLine}${boldStart}📊 Detalhes da Simulação:${boldEnd}` +
+      `${breakLine}💰 Aporte: ${formatCurrency(valor)}` +
+      `${breakLine}📅 Prazo: ${prazo} meses` +
+      `${breakLine}💎 Gema Física: ${withGem ? 'Sim' : 'Não'}` +
+      `${breakLine}🚀 Valor Final Est.: ${formatCurrency(simResult.finalAmount)}` +
+      `${breakLine}📈 Lucro Total: ${formatCurrency(simResult.totalGain)}` +
+      `${breakLine}--------------------------------`;
+
+    const phoneNumber = "5508000004998"; 
+    window.open(`https://wa.me/${phoneNumber}?text=${finalMessage}`, '_blank');
+  };
 
   // Utilitários
   const formatCurrency = (val) => 
@@ -208,7 +240,7 @@ const Simulation = () => {
                       <Loader2 className="spin-anim" size={32} color="#60a5fa" />
                     </motion.div>
                   ) : !simResult ? (
-                    /* Estado Placeholder (Antes de simular) */
+                    /* Estado Placeholder */
                     <motion.div
                         key="placeholder"
                         initial={{ opacity: 0 }}
@@ -251,25 +283,51 @@ const Simulation = () => {
                 </AnimatePresence>
               </div>
               
-              <motion.button 
-                className="btn-refazer"
-                onClick={handleSimulateClick}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                disabled={isLoading || !configLoaded}
-              >
-                {isLoading ? (
-                    <>
-                        <RefreshCw size={18} className="spin-anim" /> Processando...
-                    </>
-                ) : !simResult ? (
-                    "Simular Agora"
+              {/* ÁREA DE AÇÃO (Botões) */}
+              <div className="sim-actions-area">
+                {!simResult || isLoading ? (
+                    <motion.button 
+                        className="btn-refazer primary-action"
+                        onClick={handleSimulateClick}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        disabled={isLoading || !configLoaded}
+                    >
+                        {isLoading ? (
+                            <>
+                                <Loader2 size={18} className="spin-anim" /> Calculando...
+                            </>
+                        ) : (
+                            "Simular Agora"
+                        )}
+                    </motion.button>
                 ) : (
-                    <>
-                        <RefreshCw size={18} /> Recalcular
-                    </>
+                    // INPUT + BOTÃO WHATSAPP + LINK REFAZER
+                    <motion.div 
+                        className="sim-contact-wrapper"
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                    >
+                        <div className="sim-msg-input-box">
+                            <textarea 
+                                className="sim-msg-textarea"
+                                value={contactMessage}
+                                onChange={(e) => setContactMessage(e.target.value)}
+                                rows={2}
+                            />
+                        </div>
+
+                        <button className="btn-contact-action pulse-anim-btn" onClick={handleContactClick}>
+                            <MessageCircle size={18} />
+                            Falar com Consultor
+                        </button>
+
+                        <button className="btn-text-only-refazer" onClick={handleSimulateClick}>
+                            Refazer simulação
+                        </button>
+                    </motion.div>
                 )}
-              </motion.button>
+              </div>
 
             </div>
           </motion.div>

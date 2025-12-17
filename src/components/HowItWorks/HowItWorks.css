@@ -4,12 +4,7 @@
 .how-wrapper {
   position: relative;
   width: 100%;
-  
-  /* AJUSTE DO ÂNGULO:
-     Topo: calc(10vw + 4rem) -> Compensa a altura do triângulo (10vw) + respiro.
-     Baixo: 8rem -> Mantido original. */
   padding: calc(10vw + 4rem) 5% 8rem;
-  
   font-family: 'Inter', sans-serif;
   color: white;
   overflow: hidden;
@@ -18,27 +13,16 @@
   border: none;
 }
 
-/* --- O TRIÂNGULO BRANCO NO TOPO --- */
 .how-wrapper::before {
   content: "";
   position: absolute;
-  
-  /* --- CORREÇÃO DA LINHA FINA (SUB-PIXEL RENDERING) --- */
-  /* Subimos 2px para cobrir a fresta que o navegador cria às vezes */
   top: -2px;
   left: 0;
   width: 100%;
-  /* Aumentamos 2px na altura para compensar a subida */
   height: calc(100% + 2px);
-  
   background-color: #ffffff;
   border: none;
-  
-  /* ÂNGULO FIXO:
-     Usa 10vw na altura do corte para manter a mesma inclinação
-     da sessão WhyPhysical, não importa o tamanho da tela. */
   clip-path: polygon(100% 10vw, 0 0, 100% 0);
-  
   z-index: 0;
   pointer-events: none;
 }
@@ -101,21 +85,18 @@
   justify-content: center;
 }
 
-/* --- GRID DE CARDS COM GLOWING EFFECT --- */
 .how-steps-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 Colunas Exatas */
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem; 
   width: 100%;
 }
 
-/* Wrapper para o posicionamento no grid */
 .process-card-wrapper {
   position: relative;
   height: 100%;
 }
 
-/* Container relativo para o GlowingEffect funcionar */
 .relative-glow-card {
   position: relative;
   height: 100%;
@@ -123,18 +104,15 @@
   padding: 1px;
 }
 
-/* O Conteúdo Interno do Card */
 .process-card-content {
   position: relative;
   height: 100%;
   background: #0b2552; 
   border-radius: 1.2rem;
   padding: 1.5rem;
-  
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  
   border: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
   transition: background-color 0.3s ease;
@@ -148,10 +126,11 @@
   margin-bottom: 0.5rem;
 }
 
+/* Estilo que será copiado para o botão */
 .icon-wrapper-glass {
   width: 44px;
   height: 44px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+  background: linear-gradient(155deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 10px;
   display: flex;
@@ -185,26 +164,85 @@
   line-height: 1.5;
 }
 
+/* --- NOVA ÁREA DO CTA BUTTON (ESTILO GLASS) --- */
+.how-cta-wrapper {
+    margin-top: 4rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-gemcash-glass {
+    /* Base Glassmorphism (Igual ao ícone) */
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; /* Levemente arredondado, não pílula */
+    backdrop-filter: blur(10px); /* Efeito vidro */
+    
+    /* Layout */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 16px 32px;
+    
+    /* Texto */
+    color: white;
+    font-weight: 600;
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+/* Ícone dentro do botão com destaque */
+.glass-btn-icon {
+    display: flex;
+    align-items: center;
+    color: #60a5fa; /* Azul claro para o ícone */
+}
+
+/* Hover Effect: Borda azul e brilho interno */
+.btn-gemcash-glass:hover {
+    border-color: rgba(96, 165, 250, 0.6); /* Azul da marca */
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+    transform: translateY(-2px);
+}
+
+.btn-gemcash-glass:hover .glass-btn-icon {
+    color: white; /* Ícone fica branco no hover */
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.5));
+}
+
 /* --- RESPONSIVIDADE --- */
 @media (max-width: 1024px) {
   .how-steps-grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas em tablet */
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
   }
 }
 
 @media (max-width: 650px) {
   .how-wrapper {
-    /* Ajuste de padding lateral no mobile */
     padding-left: 5%;
     padding-right: 5%;
   }
 
   .how-steps-grid {
-    grid-template-columns: 1fr; /* 1 coluna em mobile */
+    grid-template-columns: 1fr;
   }
   
   .how-title {
     font-size: 2.2rem;
+  }
+
+  .btn-gemcash-glass {
+    width: 100%;
+    justify-content: center;
+    padding: 16px;
+    font-size: 0.95rem;
   }
 }

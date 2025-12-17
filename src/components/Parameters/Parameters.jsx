@@ -95,9 +95,9 @@ const Parameters = () => {
             </p>
 
             <div className="params-action">
-              <span className="learn-more">
+              {/* <span className="learn-more">
                 Entenda os critérios <ArrowRight size={16} className="arrow-icon" />
-              </span>
+              </span> */}
             </div>
           </motion.div>
 

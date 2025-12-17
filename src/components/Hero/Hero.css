@@ -1,6 +1,6 @@
 /* src/components/Hero/Hero.css */
 
-/* --- RESET E ESTRUTURA GERAL --- */
+/* --- RESET E ESTRUTURA GERAL (Mantido Original) --- */
 .hero-wrapper {
   position: relative;
   width: 100%;
@@ -128,16 +128,11 @@
   align-items: center;
   gap: 10px;
   cursor: pointer;
-  /* transition: all 0.2s; */
 }
 
 .btn-primary-solid:hover {
   background: #1d4ed8;
   transform: translateY(-1px);
-}
-
-.cta-arrow {
-  /* transition: transform 0.1s ease; */
 }
 
 /* --- MICROPROVAS (Esquerda Baixo no Desktop) --- */
@@ -219,29 +214,28 @@
 }
 
 /* =========================================
-   NOVO ESTILO DO CARD (ESTILO "SIMULATION")
+   ESTILO DO CARD (COMPACTO E OTIMIZADO)
    ========================================= */
 
 .sim-card-right {
   flex: 1.2;
-  /* Fundo mais escuro e "glass" como no componente Simulation */
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
   
-  /* Padding ajustado para acomodar o conteúdo mais denso */
-  padding: 2.5rem;
-  min-height: 400px;
+  /* PADDING REDUZIDO: de 2.5rem para 20px para caber os novos botões */
+  padding: 20px 24px; 
   
+  min-height: 400px;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem; /* Espaçamento vertical interno */
+  gap: 1rem; /* Gap reduzido de 1.5rem */
   justify-content: center;
   z-index: 10; 
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
   margin-bottom: 0px;
-  /* transition: all 0.1s ease; */
+  transition: all 0.2s ease;
 }
 
 .sim-card-right:hover {
@@ -249,24 +243,24 @@
     box-shadow: 0 35px 70px rgba(0, 0, 0, 0.35);
 }
 
-/* --- Inputs Internos (Estilo Simulation) --- */
+/* --- Inputs Internos --- */
 .card-inputs {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 0.8rem; /* Espaço menor entre inputs */
 }
 
 .input-group {
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.4rem; /* Labels mais perto do slider */
 }
 
 .label-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #bfdbfe;
 }
 
@@ -281,25 +275,25 @@
     color: white;
     font-weight: 700;
     font-family: monospace;
-    font-size: 1rem;
+    font-size: 0.95rem;
     background: rgba(37, 99, 235, 0.3);
-    padding: 4px 10px;
-    border-radius: 6px;
+    padding: 2px 8px;
+    border-radius: 4px;
 }
 
 .range-limits {
     display: flex;
     justify-content: space-between;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: #94a3b8;
-    margin-top: 4px;
+    margin-top: 2px;
     font-weight: 500;
 }
 
-/* Slider Vibrante (Mantido do Hero original pois é bonito) */
+/* Slider Vibrante */
 .vibrant-range {
     width: 100%;
-    height: 6px;
+    height: 5px;
     background: rgba(255,255,255,0.15);
     outline: none;
     appearance: none;
@@ -308,50 +302,38 @@
 }
 .vibrant-range::-webkit-slider-thumb {
     appearance: none;
-    width: 22px; height: 22px;
+    width: 18px; height: 18px; /* Thumb levemente menor */
     background: #2563EB;
     border: 3px solid white;
     border-radius: 50%;
     cursor: pointer;
-    /* transition: all 0.1s; */
     box-shadow: 0 0 15px rgba(37, 99, 235, 0.8);
 }
 .vibrant-range:hover::-webkit-slider-thumb { transform: scale(1.15); }
 .vibrant-range:disabled { opacity: 0.5; cursor: not-allowed; }
 
-
-/* Checkbox (Estilo Hero adaptado para dentro do grupo) */
-.checkbox-group-hero {
-    margin-top: 0.5rem;
-}
+/* Checkbox */
+.checkbox-group-hero { margin-top: 0.2rem; }
 .custom-checkbox-hero {
-    display: flex;
-    align-items: center;
-    color: #b4c6e0;
-    font-size: 0.9rem;
-    cursor: pointer;
-    user-select: none;
+    display: flex; align-items: center;
+    color: #b4c6e0; font-size: 0.85rem;
+    cursor: pointer; user-select: none;
 }
 .checkbox-box-hero {
-    width: 20px; height: 20px;
+    width: 18px; height: 18px;
     background: rgba(255,255,255,0.05);
     border: 2px solid #64748b;
-    border-radius: 6px;
+    border-radius: 5px;
     margin-right: 10px;
     display: flex; align-items: center; justify-content: center;
-    /* transition: all 0.1s ease; */
 }
-.checkbox-box-hero.checked {
-    background: #2563EB; border-color: #2563EB;
-}
+.checkbox-box-hero.checked { background: #2563EB; border-color: #2563EB; }
 
-
-/* --- Divisor e Resultados (Estilo Simulation) --- */
+/* --- Divisor e Resultados --- */
 .card-divider-hero {
-    width: 100%;
-    height: 1px;
+    width: 100%; height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-    margin: 0.5rem 0;
+    margin: 0.2rem 0;
 }
 
 .hero-card-result {
@@ -359,13 +341,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
-    min-height: 160px; /* Garante espaço para o grid */
+    gap: 0.2rem;
+    min-height: 100px; /* Reduzido de 160px */
     justify-content: center;
+    margin-bottom: 0.5rem;
 }
 
 .hero-result-label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -377,75 +360,136 @@
 }
 
 .hero-result-big-value {
-    font-size: 2.2rem;
+    /* FONTE REDUZIDA: de 2.2rem para 2rem para economizar espaço */
+    font-size: 2rem;
     font-weight: 800;
     color: white;
     text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    line-height: 1;
 }
 
-/* Grid de Detalhes */
+/* Grid de Detalhes Compacto */
 .hero-details-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 6px; /* Gap apertado */
     width: 100%;
     margin-top: 5px;
     border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 1rem;
+    padding-top: 0.8rem;
 }
 .hero-detail-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
 }
-.h-det-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; }
-.h-det-value { font-size: 0.95rem; font-weight: 700; color: white; }
-.h-det-value small { font-size: 0.7rem; font-weight: 400; color: #94a3b8; }
+.h-det-label { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; }
+.h-det-value { font-size: 0.9rem; font-weight: 700; color: white; }
+.h-det-value small { font-size: 0.65rem; }
 
-
-/* Botão de Ação (Estilo "Refazer") */
-.hero-btn-refazer {
-    background: white;
-    color: #0b2552;
-    border: none;
-    padding: 16px;
-    border-radius: 12px;
-    font-weight: 700;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    cursor: pointer;
-    /* transition: all 0.1s ease; */
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+/* --- AREA DE AÇÕES E BOTÕES (NOVO) --- */
+.hero-actions-area {
     width: 100%;
+    margin-top: 0.2rem;
 }
-.hero-btn-refazer:hover {
-    background: #f8fafc;
+
+/* Botão Simular (Inicial) - Cor ajustada para Azul Marca */
+.hero-btn-refazer, .primary-action {
+    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+    width: 100%;
+    transition: all 0.2s;
+}
+.hero-btn-refazer:hover, .primary-action:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);
     transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-    color: #2563EB;
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
 }
 .hero-btn-refazer:disabled { opacity: 0.7; cursor: not-allowed; }
 
 
-/* --- Utilitários Visuais --- */
+/* --- ÁREA DE CONTATO (PÓS-SIMULAÇÃO) --- */
+.hero-contact-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* Gap bem pequeno */
+    width: 100%;
+}
+
+.hero-msg-input-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 6px 8px;
+}
+
+.hero-msg-textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    color: #e2e8f0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    line-height: 1.3;
+    resize: none;
+    outline: none;
+}
+.hero-msg-textarea::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+/* Botão Consultor Compacto + Pulse */
+.btn-contact-action {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+.btn-contact-action:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #0891b2 100%);
+    transform: translateY(-1px);
+}
+
+/* Animação Pulse */
+@keyframes softPulse {
+    0% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.7); transform: scale(1); }
+    50% { box-shadow: 0 0 0 8px rgba(6, 182, 212, 0); transform: scale(1.01); }
+    100% { box-shadow: 0 0 0 0 rgba(6, 182, 212, 0); transform: scale(1); }
+}
+.pulse-anim-btn { animation: softPulse 2.5s infinite; }
+
+/* Link Refazer discreto */
+.btn-text-only-refazer {
+    background: transparent; border: none;
+    color: #64748b; font-size: 0.75rem;
+    cursor: pointer; text-decoration: none;
+    margin-top: -2px; align-self: center;
+}
+.btn-text-only-refazer:hover { color: #94a3b8; text-decoration: underline; }
+
+/* Utilitários Visuais */
 .text-emerald-400 { color: #34d399; }
 .text-green { color: #4ade80; }
 .text-blue { color: #60a5fa; }
-.blur-effect { filter: blur(5px); opacity: 0.5; }
-
-.hero-loader-wrapper {
-    display: flex; align-items: center; justify-content: center; height: 100px; width: 100%;
-}
+.hero-loader-wrapper { display: flex; align-items: center; justify-content: center; height: 80px; }
 .spin-anim { animation: spin 1s linear infinite; }
 @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-
-/* --- RESPONSIVIDADE MOBILE / TABLET --- */
+/* --- RESPONSIVIDADE (Mantida Original) --- */
 @media (max-width: 1024px) {
   .navbar { justify-content: center; }
   .hero-content { display: flex; flex-direction: column; padding-top: 1rem; gap: 2.5rem; }
@@ -454,15 +498,9 @@
   
   .micro-proofs-container {
     order: 3; 
-    flex-direction: column; 
-    align-items: flex-start;
-    justify-content: flex-start;
-    gap: 1.5rem;
-    padding-top: 0;
-    border-top: none; 
-    margin-top: -1rem;
-    width: 100%;
-    padding-left: 10px;
+    flex-direction: column; align-items: flex-start; justify-content: flex-start;
+    gap: 1.5rem; padding-top: 0; border-top: none; margin-top: -1rem;
+    width: 100%; padding-left: 10px;
   }
   .proof-item { justify-content: flex-start; width: 100%; text-align: left; }
 
@@ -471,20 +509,14 @@
   .context-line { justify-content: center; font-size: 0.9rem; }
   .cta-block { align-items: center; width: 100%; }
   .btn-primary-solid { width: 100%; justify-content: center; padding: 14px; }
-  .cta-arrow { transform: rotate(90deg); }
-
-  /* No mobile, a imagem some e o card ocupa a largura total */
+  
   .man-image-wrapper, .floor-shadow { display: none; }
   
   .sim-card-right {
-    width: 100%;
-    max-width: 500px; /* Limita largura no mobile pra não ficar gigante */
-    margin: 0 auto;
-    min-height: auto;
-    padding: 2rem 1.5rem;
+    width: 100%; max-width: 500px; margin: 0 auto;
+    min-height: auto; padding: 1.5rem;
   }
 
-  /* Ajuste do grid de detalhes no mobile */
   .hero-details-grid { grid-template-columns: 1fr; gap: 1rem; }
   .hero-detail-item {
       flex-direction: row; justify-content: space-between;
