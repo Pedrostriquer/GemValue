@@ -38,3 +38,7 @@ html {
   width: 100%;
   min-height: 100vh;
 }
+html, body {
+  /* Impede o efeito de mola/bounce ao rolar para fora dos limites */
+  overscroll-behavior: none;
+}

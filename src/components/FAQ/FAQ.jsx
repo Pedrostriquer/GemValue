@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus, HelpCircle } from 'lucide-react';
 import './FAQ.css';
 
-// --- 1. DADOS ESTÁTICOS (Fora do componente para não recriar a cada click) ---
 const FAQ_DATA = [
   {
     question: "O que é o GemCash?",
@@ -123,15 +122,44 @@ const FAQ_DATA = [
   }
 ];
 
-// --- 2. SUB-COMPONENTE MEMOIZADO (Evita renderizar itens não clicados) ---
+// --- OTIMIZAÇÃO: Variantes fora do componente ---
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      // Reduzi o stagger para ser mais rápido e evitar sensação de "travamento"
+      staggerChildren: 0.03, 
+      delayChildren: 0
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  show: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.3 } // Transição rápida
+  }
+};
+
+const accordionVariants = {
+  collapsed: { height: 0, opacity: 0 },
+  open: { 
+    height: "auto", 
+    opacity: 1,
+    transition: { duration: 0.3, ease: "easeInOut" }
+  }
+};
+
+// --- SUB-COMPONENTE ---
 const FAQItem = memo(({ item, isOpen, onClick, index }) => {
   return (
     <motion.div 
       className={`faq-item ${isOpen ? 'active' : ''}`}
-      variants={{
-        hidden: { opacity: 0, y: 10 },
-        show: { opacity: 1, y: 0 }
-      }}
+      variants={itemVariants}
+      // "layout" prop removida propositalmente: ela é pesada e causa flickers em listas longas
     >
       <button 
         className="faq-question" 
@@ -151,10 +179,10 @@ const FAQItem = memo(({ item, isOpen, onClick, index }) => {
         {isOpen && (
           <motion.div 
             className="faq-answer-wrapper"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }} // Curva leve
+            variants={accordionVariants}
+            initial="collapsed"
+            animate="open"
+            exit="collapsed"
           >
             <div className="faq-answer-content">
               {item.answer}
@@ -169,22 +197,9 @@ const FAQItem = memo(({ item, isOpen, onClick, index }) => {
 const FAQ = () => {
   const [activeIndex, setActiveIndex] = useState(null);
 
-  // useCallback garante que a função não seja recriada, ajudando o memo do filho
   const toggleFAQ = useCallback((index) => {
     setActiveIndex(prevIndex => prevIndex === index ? null : index);
   }, []);
-
-  // Variantes para o container controlar a entrada em cascata
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05, // Efeito rápido de cascata
-        delayChildren: 0.1
-      }
-    }
-  };
 
   return (
     <section className="faq-wrapper">
@@ -201,13 +216,17 @@ const FAQ = () => {
           </p>
         </div>
 
-        {/* 3. ANIMAÇÃO DE ENTRADA OTIMIZADA (Um viewport para todos) */}
         <motion.div 
           className="faq-grid"
           variants={containerVariants}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, margin: "-100px" }} // Carrega um pouco antes de chegar
+          // OTIMIZAÇÃO CRUCIAL:
+          // margin: "-50px 0px 0px 0px" significa: dispare a animação quando o elemento 
+          // estiver a 50px de entrar na tela (quase lá).
+          // Se aumentarmos o bottom margin negativo, ele carrega ANTES de aparecer.
+          // "200px" garante que já esteja carregado quando o usuário rolar rápido.
+          viewport={{ once: true, margin: "0px 0px -200px 0px" }}
         >
           {FAQ_DATA.map((item, index) => (
             <FAQItem 

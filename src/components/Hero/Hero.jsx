@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowRight, ShieldCheck, Building2, FileText, Info, 
@@ -16,10 +16,9 @@ import logo3D from '../../assets/logo_Gemas_3D.png';
 import manInChair from '../../assets/IMG-20251212-WA0016.png';
 
 const Hero = () => {
-  // 1. CONSUMIR O CONTEXTO (Dados globais carregados 1 vez no App.jsx)
   const { availableMonths, minAmount, isLoaded } = useContractConfig();
 
-  // Estados Locais do Formulário
+  // Estados Locais
   const [valor, setValor] = useState(7000);
   const [prazo, setPrazo] = useState(12);
   const [receberFisico, setReceberFisico] = useState(false);
@@ -27,34 +26,27 @@ const Hero = () => {
   // Estados de Resultado e UI
   const [simResult, setSimResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
+  // Removi o estado isAnimating separado, pois ele causava o delay. 
+  // Agora usamos o próprio isLoading para controlar o visual.
 
-  // 2. Sincronizar defaults quando o Contexto carregar
+  // Sincronizar defaults
   useEffect(() => {
     if (isLoaded) {
-      // Garante que o valor inicial respeite o mínimo vindo da API
-      if (valor < minAmount) {
-        setValor(minAmount);
-      }
-      
-      // Garante que o prazo inicial seja válido
+      if (valor < minAmount) setValor(minAmount);
       if (availableMonths.length > 0 && !availableMonths.includes(prazo)) {
-         // Se 12 não estiver na lista, pega o último disponível
          setPrazo(availableMonths[availableMonths.length - 1]);
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, minAmount, availableMonths]); 
 
-  // 3. Função de Simulação (Disparada apenas pelo botão)
+  // --- OTIMIZAÇÃO: Simulação Instantânea (Sem setTimeout) ---
   const handleSimulateClick = useCallback(async () => {
     if (!isLoaded) return;
 
     setIsLoading(true);
-    setIsAnimating(true);
     
     try {
-      // POST para simular (Isso ainda é feito aqui, pois depende da ação do user)
       const result = await contractService.simulate({
         amount: valor,
         months: prazo,
@@ -64,75 +56,73 @@ const Hero = () => {
     } catch (error) {
       console.error("Erro na simulação:", error);
     } finally {
+      // REMOVIDO: setTimeout(() => setIsAnimating(false), 500);
+      // A atualização agora é síncrona e instantânea
       setIsLoading(false);
-      setTimeout(() => setIsAnimating(false), 500);
     }
   }, [isLoaded, valor, prazo, receberFisico]);
 
-  // --- Utilitários de Renderização ---
   const formatCurrency = (val) => 
     val ? val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'R$ 0,00';
 
-  // Lógica do Slider de Prazo (Mapeia index 0..N para os Meses Reais)
   const prazoIndex = availableMonths.indexOf(prazo) !== -1 ? availableMonths.indexOf(prazo) : 0;
   
   const handlePrazoChange = (e) => {
     const index = Number(e.target.value);
-    if (availableMonths[index]) {
-      setPrazo(availableMonths[index]);
-    }
+    if (availableMonths[index]) setPrazo(availableMonths[index]);
   };
 
-  // --- Coreografia de Animação (Framer Motion) ---
-  // OTIMIZAÇÃO: Animações mais rápidas e leves
-  const containerSeq = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: { 
-        duration: 0.5, // Reduzido de 0.8
-        when: "beforeChildren", 
-        staggerChildren: 0.1 // Reduzido de 0.2 (muito mais rápido)
+  // --- OTIMIZAÇÃO: Configurações de Animação Leves (GPU Friendly) ---
+  // Usamos useMemo para que o React não recrie esses objetos a cada render
+  const animations = useMemo(() => ({
+    containerSeq: {
+      hidden: { opacity: 0 },
+      show: {
+        opacity: 1,
+        transition: { 
+          duration: 0.3, // Mais rápido
+          when: "beforeChildren", 
+          staggerChildren: 0.05 // Quase simultâneo (reduz sensação de lerdeza)
+        }
+      }
+    },
+    textReveal: {
+      hidden: { y: 10, opacity: 0 }, // Movimento menor (10px) exige menos repaint
+      show: { 
+        y: 0, 
+        opacity: 1, 
+        transition: { 
+          type: "tween", // 'tween' é mais leve que 'spring'
+          duration: 0.4,
+          ease: "easeOut" 
+        } 
+      }
+    },
+    imageSimReveal: {
+      hidden: { x: 20, opacity: 0 },
+      show: { 
+        x: 0, 
+        opacity: 1, 
+        transition: { 
+          type: "tween",
+          duration: 0.5, 
+          ease: "easeOut", 
+          delay: 0.1 
+        } 
       }
     }
-  };
-
-  const textReveal = {
-    hidden: { y: 20, opacity: 0 }, // Reduzido Y de 30 para 20 (menos movimento)
-    show: { 
-      y: 0, 
-      opacity: 1, 
-      transition: { 
-        duration: 0.6, // Reduzido de 0.8
-        ease: "easeOut" // 'spring' removido para aliviar cálculo
-      } 
-    }
-  };
-
-  const imageSimReveal = {
-    hidden: { x: 30, opacity: 0 }, // Reduzido X de 50 para 30
-    show: { 
-      x: 0, 
-      opacity: 1, 
-      transition: { 
-        duration: 0.8, // Reduzido de 1.0
-        ease: "easeOut", 
-        delay: 0.2 // Reduzido de 0.4
-      } 
-    }
-  };
+  }), []);
 
   return (
     <section className="hero-wrapper">
       <div className="stage-bg"></div>
 
-      {/* Navbar */}
       <nav className="navbar">
         <motion.div 
           className="brand"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          initial={{ opacity: 0 }} // Removemos o Y na navbar para carregar mais rápido visualmente
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
         >
           <img src={logo3D} alt="GemValue" className="brand-logo-3d" />
           <span className="brand-text-gradient">GemValue</span>
@@ -141,28 +131,28 @@ const Hero = () => {
 
       <motion.div 
         className="hero-content"
-        variants={containerSeq}
+        variants={animations.containerSeq}
         initial="hidden"
         animate="show"
       >
         
-        {/* === COLUNA ESQUERDA: TEXTOS === */}
+        {/* === COLUNA ESQUERDA === */}
         <div className="text-column">
-          <motion.h1 variants={textReveal} className="big-bold-title">
+          <motion.h1 variants={animations.textReveal} className="big-bold-title">
             Ativos físicos reais para proteger e construir patrimônio.
           </motion.h1>
           
-          <motion.p variants={textReveal} className="description-clean">
+          <motion.p variants={animations.textReveal} className="description-clean">
             A GemValue estrutura o acesso ao mercado de diamantes certificados,
             oferecendo propriedade real, transparência contratual e previsibilidade.
           </motion.p>
 
-          <motion.div variants={textReveal} className="context-line">
+          <motion.div variants={animations.textReveal} className="context-line">
              <Info size={16} className="text-emerald-400"/>
              Conheça o GemCash, o modelo de aquisição em ativos físicos da GemValue.
           </motion.div>
 
-          <motion.div variants={textReveal} className="cta-block">
+          <motion.div variants={animations.textReveal} className="cta-block">
             <button className="btn-primary-solid">
               Simule sua estratégia em ativos físicos 
               <ArrowRight size={20} className="cta-arrow" />
@@ -170,8 +160,8 @@ const Hero = () => {
           </motion.div>
         </div>
 
-        {/* === MICROPROVAS (Abaixo Texto) === */}
-        <motion.div variants={textReveal} className="micro-proofs-container">
+        {/* === MICROPROVAS === */}
+        <motion.div variants={animations.textReveal} className="micro-proofs-container">
             <div className="proof-item">
               <div className="proof-icon-box"><ShieldCheck size={18} /></div>
               <span>Ativos físicos certificados</span>
@@ -186,24 +176,27 @@ const Hero = () => {
             </div>
         </motion.div>
 
-        {/* === COLUNA DIREITA: IMAGEM + CARD === */}
+        {/* === COLUNA DIREITA === */}
         <motion.div 
           className="image-sim-container"
-          variants={imageSimReveal}
+          variants={animations.imageSimReveal}
         >
           <div className="floor-shadow"></div>
           
           <div className="man-image-wrapper">
-            <img src={manInChair} alt="Consultor" className="hero-man-integrated" />
+            <img 
+              src={manInChair} 
+              alt="Consultor" 
+              className="hero-man-integrated"
+              // Dica de performance para navegador priorizar esta imagem
+              fetchPriority="high" 
+            />
           </div>
 
-          {/* CARD DE SIMULAÇÃO (Integrado ao Hero) */}
+          {/* CARD DE SIMULAÇÃO */}
           <div className="sim-card-right">
             
-            {/* Inputs do Card */}
             <div className="card-inputs">
-                
-                {/* Input Valor */}
                 <div className="input-group">
                   <div className="label-row">
                     <span className="input-label"><DollarSign size={16}/> Valor do Aporte</span>
@@ -225,7 +218,6 @@ const Hero = () => {
                   </div>
                 </div>
 
-                {/* Input Prazo */}
                 <div className="input-group">
                   <div className="label-row">
                     <span className="input-label"><Calendar size={16}/> Prazo (Meses)</span>
@@ -251,7 +243,6 @@ const Hero = () => {
                   </div>
                 </div>
 
-                {/* Checkbox */}
                 <div className="checkbox-group-hero">
                     <label className="custom-checkbox-hero" onClick={() => setReceberFisico(!receberFisico)}>
                         <div className={`checkbox-box-hero ${receberFisico ? 'checked' : ''}`}>
@@ -260,7 +251,6 @@ const Hero = () => {
                         <span className="checkbox-text-hero">Incluir recebimento da Gema Física</span>
                     </label>
                 </div>
-
             </div>
 
             <div className="card-divider-hero"></div>
@@ -269,37 +259,39 @@ const Hero = () => {
             <div className="hero-card-result">
               <span className="hero-result-label">Valor Final Estimado</span>
               
+              {/* mode='wait' garante que um saia antes do outro entrar, mas com duração curta é rapido */}
               <AnimatePresence mode='wait'>
                 {isLoading ? (
-                  /* Loader State */
                   <motion.div 
                     key="loader"
-                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.1 } }}
                     className="hero-loader-wrapper"
                   >
                     <Loader2 size={32} className="spin-anim text-emerald-400" />
                   </motion.div>
                 ) : !simResult ? (
-                   /* Placeholder State (Antes de simular) */
                    <motion.div 
                      key="placeholder"
-                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                     initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0.1 } }}
                      className="hero-result-placeholder"
                    >
                      Clique abaixo para calcular a projeção
                    </motion.div>
                 ) : (
-                  /* Result State (Grid) */
                   <motion.div 
                     key="result"
-                    initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, scale: 0.95 }} // Scale sutil em vez de Y
+                    animate={{ opacity: 1, scale: 1 }} 
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }} // Transição rápida
                     className="hero-result-content"
                   >
-                     <div className={`hero-result-big-value ${isAnimating ? 'blur-effect' : ''}`}>
+                     {/* Removi a classe 'blur-effect' condicional, pois não queremos delay */}
+                     <div className="hero-result-big-value">
                         {formatCurrency(simResult.finalAmount)}
                      </div>
 
-                     <div className={`hero-details-grid ${isAnimating ? 'blur-effect' : ''}`}>
+                     <div className="hero-details-grid">
                         <div className="hero-detail-item">
                             <span className="h-det-label">Rentabilidade</span>
                             <span className="h-det-value text-green">{simResult.monthlyPercentage?.toFixed(2)}% <small>/mês</small></span>
@@ -318,7 +310,6 @@ const Hero = () => {
               </AnimatePresence>
             </div>
 
-            {/* Botão de Ação */}
             <button 
                 className="hero-btn-refazer" 
                 onClick={handleSimulateClick}

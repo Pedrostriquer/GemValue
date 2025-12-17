@@ -5,11 +5,11 @@
   width: 100%;
   padding: 8rem 5%;
   font-family: 'Inter', sans-serif;
-  
-  /* FUNDO BRANCO para contrastar com a sessão anterior escura */
   background-color: #ffffff;
   color: #334155;
   overflow: hidden;
+  /* Otimização de renderização de fundo */
+  backface-visibility: hidden;
 }
 
 .params-container {
@@ -29,7 +29,14 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  /* Garante que a opacidade inicial seja respeitada antes do JS carregar */
+  opacity: 0; 
+  animation: fadeInFix 0s forwards; 
 }
+/* Pequeno hack para garantir visibilidade se o JS falhar, 
+   mas o Framer Motion sobrescreve isso corretamente */
+@keyframes fadeInFix { to { opacity: 1; } }
+
 
 .params-tag {
   display: inline-block;
@@ -57,7 +64,6 @@
   display: inline-block;
 }
 
-/* Detalhe de sublinhado sutil */
 .highlight-blue::after {
   content: '';
   position: absolute;
@@ -91,19 +97,29 @@
   padding-left: 1rem;
 }
 
+/* --- ACTION LINK (OTIMIZADO) --- */
 .learn-more {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 8px; /* Gap fixo, não animamos isso */
   color: #2563EB;
   font-weight: 600;
   cursor: pointer;
-  transition: gap 0.3s;
+  text-decoration: none;
 }
 
-.learn-more:hover {
-  gap: 12px;
-  text-decoration: underline;
+.learn-more .arrow-icon {
+  transition: transform 0.3s ease; /* Animação leve na GPU */
+}
+
+/* Apenas desktop tem animação de hover */
+@media (hover: hover) {
+  .learn-more:hover {
+    text-decoration: underline;
+  }
+  .learn-more:hover .arrow-icon {
+    transform: translateX(5px);
+  }
 }
 
 /* --- COLUNA VISUAL (CARDS) --- */
@@ -132,13 +148,10 @@
   border: 1px solid #e2e8f0;
   border-radius: 12px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-  transition: all 0.3s ease;
-}
-
-.param-card:hover {
-  transform: translateX(-5px);
-  border-color: #2563EB;
-  box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.1);
+  
+  /* Melhora performance de animação */
+  will-change: transform, opacity;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .param-icon-box {
@@ -151,11 +164,7 @@
   border-radius: 10px;
   color: #2563EB;
   flex-shrink: 0;
-}
-
-.param-card:hover .param-icon-box {
-  background: #2563EB;
-  color: white;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .param-info h4 {
@@ -171,7 +180,21 @@
   line-height: 1.4;
 }
 
-/* Círculo decorativo atrás dos cards */
+/* --- INTERAÇÃO APENAS NO DESKTOP --- */
+@media (hover: hover) {
+  .param-card:hover {
+    transform: translateX(-5px);
+    border-color: #2563EB;
+    box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.1);
+  }
+  
+  .param-card:hover .param-icon-box {
+    background: #2563EB;
+    color: white;
+  }
+}
+
+/* Círculo decorativo */
 .visual-bg-circle {
   position: absolute;
   top: 50%;
@@ -181,7 +204,7 @@
   height: 400px;
   background: radial-gradient(circle, rgba(37,99,235,0.08) 0%, transparent 70%);
   z-index: 1;
-  pointer-events: none;
+  pointer-events: none; /* Garante que não atrapalhe o scroll */
 }
 
 /* --- RESPONSIVIDADE --- */
@@ -194,13 +217,31 @@
   .params-text-col {
     align-items: center;
     text-align: center;
+    opacity: 1; /* Força visibilidade caso JS falhe */
   }
 
   .params-complement {
-    text-align: left; /* Mantém leitura fácil */
+    text-align: left;
+    max-width: 80%; /* Evita que fique muito largo no mobile */
   }
 
   .params-title {
     font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .params-wrapper {
+    padding: 4rem 5%; /* Padding reduzido no mobile */
+  }
+
+  .param-card {
+    padding: 1.2rem;
+    gap: 1rem;
+  }
+
+  .visual-bg-circle {
+    width: 300px; /* Reduz tamanho do background no mobile */
+    height: 300px;
   }
 }

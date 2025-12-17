@@ -5,12 +5,14 @@
   width: 100%;
   padding: 8rem 5%;
   font-family: 'Inter', sans-serif;
-  background-color: #0b2552; /* Azul Authority/Simulation */
+  background-color: #0b2552;
   color: white;
   overflow: hidden;
+  /* Previne flicker no fundo em alguns browsers mobile */
+  -webkit-font-smoothing: antialiased;
 }
 
-/* --- GLOW (ILUMINAÇÃO SUAVE) --- */
+/* --- GLOW OTIMIZADO --- */
 .faq-glow {
   position: absolute;
   top: 20%;
@@ -25,10 +27,14 @@
   filter: blur(80px);
   z-index: 0;
   pointer-events: none;
+  
+  /* HACK DE PERFORMANCE: Força a GPU a renderizar esse blur pesado */
+  transform: translateZ(0); 
+  will-change: transform;
 }
 
 .faq-container {
-  max-width: 900px; /* Largura contida para leitura confortável */
+  max-width: 900px;
   margin: 0 auto;
   position: relative;
   z-index: 2;
@@ -89,7 +95,9 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  /* Evita repintura de layout complexo */
+  transform: translateZ(0); 
 }
 
 .faq-item:hover, .faq-item.active {
@@ -109,7 +117,8 @@
   text-align: left;
   color: white;
   font-family: 'Inter', sans-serif;
-  transition: all 0.3s;
+  /* Remove highlight azul padrão de toque no mobile */
+  -webkit-tap-highlight-color: transparent;
 }
 
 .question-content {
@@ -119,15 +128,17 @@
   font-size: 1.1rem;
   font-weight: 600;
   color: #e2e8f0;
+  transition: color 0.2s ease;
 }
 
 .faq-item.active .question-content {
-  color: #60a5fa; /* Azul destaque quando aberto */
+  color: #60a5fa;
 }
 
 .icon-question {
   color: #475569;
   flex-shrink: 0;
+  transition: color 0.2s ease;
 }
 
 .faq-item.active .icon-question {
@@ -143,7 +154,7 @@
   background: rgba(255, 255, 255, 0.05);
   border-radius: 50%;
   color: #94a3b8;
-  transition: all 0.3s;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .faq-item.active .icon-toggle {
@@ -152,13 +163,15 @@
   transform: rotate(180deg);
 }
 
-/* --- RESPOSTA (ANIMAÇÃO) --- */
+/* --- RESPOSTA (OTIMIZADA) --- */
 .faq-answer-wrapper {
   overflow: hidden;
+  /* OTIMIZAÇÃO: Avisa o navegador que a altura vai mudar */
+  will-change: height, opacity;
 }
 
 .faq-answer-content {
-  padding: 0 1.5rem 1.5rem 3.5rem; /* Indentado para alinhar com o texto da pergunta */
+  padding: 0 1.5rem 1.5rem 3.5rem;
   color: #cbd5e1;
   font-size: 1rem;
   line-height: 1.6;
@@ -209,16 +222,18 @@
   transition: all 0.3s;
 }
 
-.btn-contact-simple:hover {
-  background: white;
-  color: #0b2552;
-  border-color: white;
+@media (hover: hover) {
+  .btn-contact-simple:hover {
+    background: white;
+    color: #0b2552;
+    border-color: white;
+  }
 }
 
 /* --- RESPONSIVIDADE --- */
 @media (max-width: 768px) {
   .faq-answer-content {
-    padding: 0 1.5rem 1.5rem 1.5rem; /* Menos indentação no mobile */
+    padding: 0 1.5rem 1.5rem 1.5rem;
   }
   
   .faq-question {

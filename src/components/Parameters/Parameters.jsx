@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import './Parameters.css';
 
-// --- Dados Estáticos (Fora do componente) ---
+// --- Dados Estáticos ---
 const HIGHLIGHTS = [
   {
     icon: <FileCheck size={24} />,
@@ -27,24 +27,33 @@ const HIGHLIGHTS = [
   }
 ];
 
-// --- Variantes de Animação ---
+// --- Variantes Otimizadas ---
 const containerVariants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.2, // Um card aparece 0.2s depois do outro
+      staggerChildren: 0.15, // Tempo levemente mais rápido entre cards
       delayChildren: 0.1
     }
   }
 };
 
 const cardVariants = {
-  hidden: { opacity: 0, x: 20 }, // Deslocamento menor (era 30) para evitar layout shift brusco
+  hidden: { opacity: 0, x: 20 },
   show: { 
     opacity: 1, 
     x: 0,
-    transition: { duration: 0.5, ease: "easeOut" } // Movimento suave e estável
+    transition: { duration: 0.4, ease: "easeOut" }
+  }
+};
+
+const textVariants = {
+  hidden: { opacity: 0, x: -20 },
+  show: { 
+    opacity: 1, 
+    x: 0,
+    transition: { duration: 0.5, ease: "easeOut" }
   }
 };
 
@@ -58,10 +67,11 @@ const Parameters = () => {
           {/* COLUNA ESQUERDA: TEXTO PRINCIPAL */}
           <motion.div 
             className="params-text-col"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            viewport={{ once: true, margin: "-50px" }}
+            variants={textVariants}
+            initial="hidden"
+            whileInView="show"
+            // viewport margin: começa a carregar 100px antes de entrar totalmente na tela
+            viewport={{ once: true, margin: "0px 0px -100px 0px" }}
           >
             <div className="params-header">
               <span className="params-tag">SEGURANÇA E CLAREZA</span>
@@ -86,20 +96,19 @@ const Parameters = () => {
 
             <div className="params-action">
               <span className="learn-more">
-                Entenda os critérios <ArrowRight size={16} />
+                Entenda os critérios <ArrowRight size={16} className="arrow-icon" />
               </span>
             </div>
           </motion.div>
 
           {/* COLUNA DIREITA: DESTAQUES VISUAIS */}
           <div className="params-visual-col">
-            {/* O Container controla a animação dos filhos */}
             <motion.div 
               className="visual-cards-stack"
               variants={containerVariants}
               initial="hidden"
               whileInView="show"
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, margin: "0px 0px -50px 0px" }}
             >
               {HIGHLIGHTS.map((item, index) => (
                 <motion.div 

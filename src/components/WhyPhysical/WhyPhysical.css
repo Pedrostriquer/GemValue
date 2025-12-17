@@ -4,27 +4,20 @@
 .why-wrapper {
   position: relative;
   width: 100%;
-  
-  /* AJUSTE RESPONSIVO DO PADDING:
-     Calcula o espaço baseado na inclinação (10vw) + um respiro (4rem).
-     Isso impede que o título fique 'dentro' do corte em telas grandes
-     e remove o espaço excessivo em telas pequenas. */
   padding: calc(10vw + 4rem) 5% 6rem;
-  
-  /* Fundo Escuro (que aparece no triângulo cortado) */
   background-color: #01050a;
   background-image: 
     linear-gradient(180deg, #071124 0%, rgba(1, 5, 10, 0) 95%),
     linear-gradient(225deg, #01050a 8%, #081c42 100%);
-    
   font-family: 'Inter', sans-serif;
   color: #334155; 
   overflow: hidden;
   z-index: 1; 
-
+  /* Adiciona renderização de hardware para evitar flickers no fundo */
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* 2. A CAMADA BRANCA (Pseudo-elemento) */
 .why-wrapper::before {
   content: "";
   position: absolute;
@@ -33,14 +26,9 @@
   width: 100%;
   height: 100%;
   background-color: #ffffff;
-  
-  /* --- A CORREÇÃO DO ÂNGULO --- */
-  /* Substituímos '20%' (que varia com a altura) por '10vw' (que varia com a largura).
-     Isso mantém o ângulo da diagonal constante em qualquer dispositivo. 
-     Se quiser mais inclinado, aumente para 12vw ou 15vw. */
   clip-path: polygon(0 10vw, 100% 0, 100% 100%, 0 100%);
-  
   z-index: 2; 
+  pointer-events: none; /* Melhora performance de scroll */
 }
 
 .why-container {
@@ -54,7 +42,7 @@
 
 /* --- HEADER INTERNO --- */
 .why-header-internal {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.0rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -79,8 +67,7 @@
   line-height: 1.2;
   font-weight: 700;
   letter-spacing: -1px;
-  margin-bottom: 1rem;
-  
+  /* margin-bottom: 1rem; */
   background: linear-gradient(135deg, #020610 0%, #1e3a8a 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -112,7 +99,7 @@
   color: #1e3a8a; 
   border-left: 4px solid #2563EB;
   padding-left: 20px;
-  margin-top: 1rem;
+  /* margin-top: 1rem; */
 }
 
 .body-text {
@@ -144,15 +131,11 @@
   background: #f8fafc; 
   border: 1px solid #e2e8f0;
   border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  /* Transição via CSS é mais leve que JS */
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   cursor: default;
-}
-
-.feature-card:hover {
-  background: #ffffff;
-  border-color: #2563EB;
-  transform: translateX(10px); 
-  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+  /* Otimização de renderização */
+  will-change: transform; 
 }
 
 .card-icon-wrapper {
@@ -165,13 +148,7 @@
   border: 1px solid rgba(37, 99, 235, 0.2);
   border-radius: 10px;
   color: #2563EB;
-}
-
-.feature-card:hover .card-icon-wrapper {
-  background: #2563EB;
-  color: white;
-  border-color: #2563EB;
-  transition: all 0.3s;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .card-info {
@@ -190,6 +167,23 @@
   font-size: 0.95rem;
   color: #64748b;
   line-height: 1.5;
+}
+
+/* --- INTERAÇÃO (APENAS DESKTOP) --- */
+/* Isso impede o "flicker" e a lentidão no celular */
+@media (hover: hover) {
+  .feature-card:hover {
+    background: #ffffff;
+    border-color: #2563EB;
+    transform: translateX(10px); 
+    box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+  }
+
+  .feature-card:hover .card-icon-wrapper {
+    background: #2563EB;
+    color: white;
+    border-color: #2563EB;
+  }
 }
 
 /* --- RESPONSIVIDADE --- */
@@ -211,19 +205,26 @@
 
 @media (max-width: 768px) {
   .why-wrapper {
-    /* Padding ajustado via calc() no topo, mas garantindo espaçamento lateral */
     padding-left: 5%;
     padding-right: 5%;
     padding-bottom: 4rem;
+    /* Reduzir o padding top no mobile para não ficar um buraco enorme */
+    padding-top: calc(10vw + 3rem);
   }
 
   .feature-card {
     padding: 1.2rem;
     align-items: flex-start;
+    /* No mobile, removemos o gap excessivo */
+    gap: 1rem;
   }
 
   .card-icon-wrapper {
     min-width: 40px;
     height: 40px;
+  }
+  
+  .why-title {
+    font-size: 1.8rem; /* Título um pouco menor no mobile */
   }
 }

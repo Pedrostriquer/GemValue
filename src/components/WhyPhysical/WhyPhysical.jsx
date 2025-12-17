@@ -9,46 +9,57 @@ import {
 } from 'lucide-react';
 import './WhyPhysical.css';
 
+// Mover dados e variantes para fora do componente evita recriação a cada render (Melhora performance)
+const features = [
+  {
+    icon: <Gem size={24} />,
+    title: "Propriedade tangível e verificável",
+    desc: "Seu ativo existe fisicamente, com certificação internacional e posse real."
+  },
+  {
+    icon: <TrendingDown size={24} />,
+    title: "Menor exposição à volatilidade",
+    desc: "Descorrelação direta com os humores diários e especulações da bolsa de valores."
+  },
+  {
+    icon: <Landmark size={24} />,
+    title: "Independência de bolsas e bancos",
+    desc: "Um ativo soberano que não depende da solvência de instituições financeiras."
+  },
+  {
+    icon: <FileKey size={24} />,
+    title: "Estruturas privadas e contratuais",
+    desc: "Segurança jurídica através de contratos robustos de compra e venda."
+  },
+  {
+    icon: <Sprout size={24} />,
+    title: "Preservação e crescimento",
+    desc: "Foco histórico em proteção de poder de compra e valorização a longo prazo."
+  }
+];
+
+// Variantes otimizadas
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1, // Controla o tempo entre um card e outro
+      delayChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.4, ease: "easeOut" }
+  }
+};
+
 const WhyPhysical = () => {
-  
-  const features = [
-    {
-      icon: <Gem size={24} />,
-      title: "Propriedade tangível e verificável",
-      desc: "Seu ativo existe fisicamente, com certificação internacional e posse real."
-    },
-    {
-      icon: <TrendingDown size={24} />,
-      title: "Menor exposição à volatilidade",
-      desc: "Descorrelação direta com os humores diários e especulações da bolsa de valores."
-    },
-    {
-      icon: <Landmark size={24} />,
-      title: "Independência de bolsas e bancos",
-      desc: "Um ativo soberano que não depende da solvência de instituições financeiras."
-    },
-    {
-      icon: <FileKey size={24} />,
-      title: "Estruturas privadas e contratuais",
-      desc: "Segurança jurídica através de contratos robustos de compra e venda."
-    },
-    {
-      icon: <Sprout size={24} />,
-      title: "Preservação e crescimento",
-      desc: "Foco histórico em proteção de poder de compra e valorização a longo prazo."
-    }
-  ];
-
-  // Variante Simplificada (Sem delays complexos que causam "piscada")
-  const simpleFadeUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { duration: 0.5, ease: "easeOut" } 
-    }
-  };
-
   return (
     <section className="why-wrapper" id="modelo">
       <div className="why-container">
@@ -60,12 +71,13 @@ const WhyPhysical = () => {
             className="why-text-col"
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            variants={simpleFadeUp}
+            // viewport margin ajustada para carregar um pouco antes de aparecer totalmente
+            viewport={{ once: true, margin: "0px 0px -100px 0px" }}
+            variants={itemVariants}
           >
             <div className="why-header-internal">
               <span className="section-tag">
-                BLOCO 2 – POR QUE ATIVOS FÍSICOS
+                POR QUE ATIVOS FÍSICOS
               </span>
               
               <h2 className="why-title">
@@ -87,20 +99,20 @@ const WhyPhysical = () => {
           </motion.div>
 
           {/* COLUNA DIREITA: CARDS */}
-          <div className="why-cards-col">
+          {/* O container gerencia a animação dos filhos */}
+          <motion.div 
+            className="why-cards-col"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "0px 0px -50px 0px" }}
+          >
             {features.map((item, index) => (
               <motion.div 
                 key={index} 
                 className="feature-card"
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ 
-                  duration: 0.4, 
-                  delay: index * 0.1, // Stagger manual simples (mais estável)
-                  ease: "easeOut" 
-                }}
-                whileHover={{ scale: 1.02 }} // Apenas escala, sem cor de fundo
+                variants={itemVariants}
+                // REMOVIDO: whileHover do JS (movido para CSS para performance)
               >
                 <div className="card-icon-wrapper">
                   {item.icon}
@@ -111,7 +123,7 @@ const WhyPhysical = () => {
                 </div>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
         </div>
       </div>
