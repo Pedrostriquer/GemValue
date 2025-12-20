@@ -3,12 +3,46 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Instagram, Facebook, Linkedin, Youtube, 
   Gem, FileText, ShieldCheck, MapPin, 
-  Mail, Phone, MessageCircle, X
+  Mail, Phone, MessageCircle, X, AlertCircle
 } from 'lucide-react';
 import './Footer.css';
 
 // --- CONSTANTES ESTÁTICAS (Não pesam no render) ---
 const CURRENT_YEAR = new Date().getFullYear();
+
+// === TEXTO COMPLETO: AVISO LEGAL ===
+const LEGAL_NOTICE_TEXT = (
+  <div className="legal-text-content">
+    <p>As informações disponibilizadas no site da GemValue têm caráter exclusivamente informativo e educacional. O conteúdo apresentado não constitui recomendação personalizada, oferta pública, promessa de resultado ou aconselhamento financeiro, jurídico ou patrimonial.</p>
+    <p>A GemValue atua na estruturação de modelos baseados em ativos físicos, respeitando critérios operacionais e contratuais claramente definidos.</p>
+
+    <h3>1. Caráter informativo do conteúdo</h3>
+    <p>O conteúdo apresentado não constitui recomendação personalizada, oferta pública, promessa de resultado ou aconselhamento financeiro, jurídico ou patrimonial.</p>
+
+    <h3>2. Natureza das estruturas apresentadas</h3>
+    <p>As estruturas descritas neste site envolvem ativos físicos reais, como gemas e diamantes certificados, cuja aquisição, custódia, posse, prazos e condições são definidos exclusivamente em contrato, no momento da formalização da operação.</p>
+    <p>Cada estrutura possui características próprias, incluindo regras de funcionamento, prazos específicos, formas de custódia ou posse e critérios de valorização, conforme detalhado na documentação contratual correspondente.</p>
+
+    <h3>3. Ausência de garantia de resultados</h3>
+    <p>Eventuais simulações, projeções ou referências a resultados obtidos no passado não representam garantia de resultados futuros. Tais informações têm finalidade meramente ilustrativa e servem apenas como apoio à compreensão do modelo operacional apresentado.</p>
+    <p>A valorização de ativos físicos pode variar de acordo com fatores como demanda, liquidez, condições comerciais e dinâmica do mercado.</p>
+
+    <h3>4. Compreensão das características da estrutura</h3>
+    <p>Os participantes devem compreender as características das estruturas baseadas em ativos físicos, incluindo prazos, condições de liquidez e critérios de valorização definidos contratualmente. Todas essas informações são apresentadas de forma clara no momento da formalização.</p>
+
+    <h3>5. Relação com a Gemas Brilhantes</h3>
+    <p>A plataforma GemValue é desenvolvida e operada pela Gemas Brilhantes, empresa especializada em estruturas baseadas em ativos físicos e operações lastreadas no mercado real de gemas preciosas.</p>
+
+    <h3>6. Disponibilidade e jurisdição</h3>
+    <p>Os produtos e serviços descritos neste site podem não estar disponíveis para todas as jurisdições, perfis ou categorias de participantes. A legislação e regulamentação aplicáveis podem variar conforme o país ou localidade.</p>
+
+    <h3>7. Atualizações e alterações</h3>
+    <p>A GemValue se reserva o direito de alterar, atualizar ou modificar as informações contidas neste site a qualquer momento, visando manter a clareza e a transparência.</p>
+
+    <h3>8. Aceitação dos termos</h3>
+    <p>Ao acessar e utilizar este site, o usuário declara que leu, compreendeu e concorda com os termos deste Aviso Legal, bem como com os Termos de Uso e a Política de Privacidade da GemValue.</p>
+  </div>
+);
 
 // === TEXTO COMPLETO: TERMOS DE USO ===
 const TERMS_TEXT = (
@@ -18,22 +52,18 @@ const TERMS_TEXT = (
 
     <h3>1. Natureza da plataforma</h3>
     <p>A GemValue atua como uma plataforma informativa, voltada à apresentação de estruturas baseadas em ativos físicos, formalizadas por contrato com a Gemas Brilhantes.</p>
-    <p>As informações disponibilizadas possuem caráter informativo e não constituem oferta pública, promessa ou recomendação financeira.</p>
 
     <h3>2. Não caracterização como instituição financeira</h3>
     <p>A GemValue e a Gemas Brilhantes não são instituições financeiras, não realizam captação pública de recursos, nem intermediação de valores mobiliários.</p>
 
     <h3>3. Uso da plataforma</h3>
-    <p>O usuário compromete-se a utilizar a plataforma de forma lícita, ética e responsável, fornecendo informações verdadeiras quando solicitado.</p>
+    <p>O usuário compromete-se a utilizar a plataforma de forma lícita, ética e responsável.</p>
 
     <h3>4. Propriedade intelectual</h3>
-    <p>Todo o conteúdo disponibilizado na plataforma é de propriedade da Gemas Brilhantes, sendo vedada sua reprodução sem autorização.</p>
+    <p>Todo o conteúdo disponibilizado na plataforma é de propriedade da Gemas Brilhantes.</p>
 
     <h3>5. Limitação de responsabilidade</h3>
     <p>A Gemas Brilhantes não se responsabiliza por decisões tomadas pelo usuário com base nas informações disponibilizadas na plataforma.</p>
-
-    <h3>6. Alterações e legislação aplicável</h3>
-    <p>Estes Termos de Uso podem ser atualizados a qualquer momento e são regidos pelas leis da República Federativa do Brasil.</p>
 
     <p className="legal-update">Última atualização: Janeiro de 2025</p>
   </div>
@@ -42,62 +72,25 @@ const TERMS_TEXT = (
 // === TEXTO COMPLETO: POLÍTICA DE PRIVACIDADE ===
 const PRIVACY_TEXT = (
   <div className="legal-text-content">
-    <p>A presente Política de Privacidade tem como objetivo informar, de forma clara e transparente, como os dados pessoais dos usuários são coletados, utilizados, armazenados e protegidos ao acessar e utilizar a plataforma GemValue.</p>
-    <p>A GemValue é uma plataforma desenvolvida e operada pela Gemas Brilhantes, responsável legal pelo tratamento dos dados pessoais aqui descritos.</p>
-
+    <p>A presente Política de Privacidade informa como os dados pessoais dos usuários são coletados e protegidos ao acessar a plataforma GemValue.</p>
+    
     <h3>1. Quem somos</h3>
-    <p>GemValue é uma plataforma digital vinculada à Gemas Brilhantes, especializada em estruturas baseadas em ativos físicos e operações comerciais lastreadas no mercado real de gemas preciosas.</p>
-    <p><strong>Responsável legal:</strong><br/>Gemas Brilhantes<br/>CNPJ: 50.793.164/0001-91</p>
+    <p>Gemas Brilhantes - CNPJ: 50.793.164/0001-91</p>
 
     <h3>2. Quais dados coletamos</h3>
-    <p>Podemos coletar os seguintes dados pessoais, de forma direta ou indireta:</p>
-    <ul>
-      <li>Nome completo</li>
-      <li>Endereço de e-mail</li>
-      <li>Número de telefone (WhatsApp)</li>
-      <li>Informações fornecidas em formulários de contato ou simulação</li>
-      <li>Endereço IP e dados de navegação</li>
-      <li>Informações sobre dispositivo e navegador</li>
-    </ul>
-    <p>A coleta ocorre quando o usuário preenche formulários no site, solicita contato com um especialista ou interage com anúncios e conteúdos.</p>
+    <p>Podemos coletar nome, e-mail, telefone (WhatsApp) e dados de navegação fornecidos em formulários.</p>
 
     <h3>3. Finalidade do uso dos dados</h3>
-    <p>Os dados coletados são utilizados para:</p>
-    <ul>
-      <li>Entrar em contato com o usuário quando solicitado</li>
-      <li>Enviar informações relacionadas às estruturas apresentadas</li>
-      <li>Prestar atendimento, suporte e esclarecimento de dúvidas</li>
-      <li>Cumprir obrigações legais e regulatórias</li>
-      <li>Melhorar a experiência de navegação e realizar análises internas</li>
-    </ul>
+    <p>Os dados são usados para contato solicitado, envio de informações sobre estruturas e suporte.</p>
 
     <h3>4. Compartilhamento de dados</h3>
-    <p>Os dados pessoais poderão ser compartilhados apenas quando necessário, com ferramentas de atendimento e CRM, plataformas de automação de marketing e serviços de infraestrutura tecnológica.</p>
-    <p>A Gemas Brilhantes <strong>não comercializa</strong>, vende ou repassa dados pessoais a terceiros para fins indevidos.</p>
-
-    <h3>5. Armazenamento e segurança dos dados</h3>
-    <p>Adotamos medidas técnicas e organizacionais adequadas para proteger os dados pessoais contra acesso não autorizado, perda, alteração ou destruição indevida.</p>
-
-    <h3>6. Direitos do titular dos dados</h3>
-    <p>Nos termos da LGPD, o usuário tem direito a confirmar a existência de tratamento, acessar seus dados, solicitar correção, exclusão ou anonimização, e revogar consentimentos.</p>
-
-    <h3>7. Cookies e tecnologias de rastreamento</h3>
-    <p>A plataforma pode utilizar cookies para melhorar a experiência do usuário e analisar padrões de navegação. O usuário pode gerenciar cookies diretamente em seu navegador.</p>
-
-    <h3>8. Aviso legal importante</h3>
-    <p>A GemValue não é uma instituição financeira e não realiza captação pública de recursos. As informações têm caráter informativo sobre operações comerciais com lastro físico.</p>
-
-    <h3>9. Alterações nesta Política</h3>
-    <p>Esta Política de Privacidade pode ser atualizada a qualquer momento. Recomendamos a revisão periódica deste documento.</p>
-
-    <h3>10. Contato</h3>
-    <p>Em caso de dúvidas, entre em contato pelos canais oficiais da Gemas Brilhantes.</p>
+    <p>A Gemas Brilhantes não comercializa dados pessoais a terceiros.</p>
 
     <p className="legal-update">Última atualização: Janeiro de 2025</p>
   </div>
 );
 
-// --- Componente de Animação Otimizado (Sem Blur) ---
+// --- Componente de Animação Otimizado ---
 const AnimatedContainer = ({ children, delay = 0 }) => {
   return (
     <motion.div
@@ -134,7 +127,9 @@ const LegalModal = ({ isOpen, onClose, title, content }) => {
         </div>
         
         <div className="modal-body-scroll">
-          {content}
+          <div className="modal-body">
+            {content}
+          </div>
         </div>
       </motion.div>
     </div>
@@ -153,11 +148,16 @@ const Footer = () => {
     setActiveModal(null);
   }, []);
 
-  // useMemo para lista de links estática
   const footerLinks = useMemo(() => [
     {
       label: 'Legal',
       links: [
+        { 
+          title: 'Aviso Legal', 
+          href: '#', 
+          icon: AlertCircle, 
+          action: (e) => openModal('legal', e) 
+        },
         { 
           title: 'Termos de Uso', 
           href: '#', 
@@ -259,8 +259,16 @@ const Footer = () => {
           <LegalModal 
             isOpen={!!activeModal}
             onClose={closeModal}
-            title={activeModal === 'terms' ? 'Termos de Uso' : 'Política de Privacidade'}
-            content={activeModal === 'terms' ? TERMS_TEXT : PRIVACY_TEXT}
+            title={
+              activeModal === 'legal' ? 'Aviso Legal' : 
+              activeModal === 'terms' ? 'Termos de Uso' : 
+              'Política de Privacidade'
+            }
+            content={
+              activeModal === 'legal' ? LEGAL_NOTICE_TEXT : 
+              activeModal === 'terms' ? TERMS_TEXT : 
+              PRIVACY_TEXT
+            }
           />
         )}
       </AnimatePresence>
