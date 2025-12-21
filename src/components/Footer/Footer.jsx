@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Instagram, Facebook, Linkedin, Youtube, 
   Gem, FileText, ShieldCheck, MapPin, 
-  Mail, Phone, MessageCircle, X, AlertCircle
+  Mail, MessageCircle, X, AlertCircle
 } from 'lucide-react';
 import './Footer.css';
 
@@ -186,8 +186,11 @@ const Footer = () => {
       links: [
         { title: 'Av. Rep. Argentina, 1336 - Água Verde, Curitiba - PR', href: '#', icon: MapPin },
         { title: 'suporte@gemasbrilhantes.com.br', href: 'mailto:suporte@gemasbrilhantes.com.br', icon: Mail },
-        { title: 'Whatsapp: 0800-000-4998', href: 'https://wa.me/5508000004998', icon: MessageCircle },
-        { title: 'SAC: 51 9984-1455', href: 'tel:+555199841455', icon: Phone },
+        { 
+          title: 'SAC: 0800-000-4998 (WhatsApp)', 
+          href: 'https://wa.me/5508000004998', 
+          icon: MessageCircle 
+        },
       ],
     },
   ], [openModal]); 
