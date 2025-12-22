@@ -18,6 +18,9 @@ import Simulation from './components/Simulation/Simulation';
 import FAQ from './components/FAQ/FAQ';
 import Footer from './components/Footer/Footer'; 
 
+// Botão Flutuante de WhatsApp
+import WhatsAppButton from './components/WhatsAppButton/WhatsAppButton';
+
 function App() {
   return (
     // 2. ENVOLVER TUDO COM O PROVIDER
@@ -35,6 +38,9 @@ function App() {
         
         {/* Footer Final */}
         <Footer />
+        
+        {/* Botão Flutuante do WhatsApp */}
+        <WhatsAppButton />
         
       </main>
     </ContractProvider>
